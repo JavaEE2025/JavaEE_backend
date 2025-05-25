@@ -24,4 +24,8 @@ public class UserService {
     public Boolean findUser(int id){
         return userMapper.findUser(id) != null;
     }
+
+    public boolean register(int id, String password, String type) {
+        return userMapper.register(id,password,type)>0;
+    }
 }

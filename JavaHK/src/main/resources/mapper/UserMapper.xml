@@ -3,8 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.javahk.mapper.UserMapper">
-    <!--    id对应mapper里面的方法名 resultType对应实体类的数据库类-->
     <select id="login"  resultType="com.example.javahk.entity.User">
         select * from users where id = #{id} and password = #{password} and type = #{type}
     </select>
+    <select id="findUser"  resultType="com.example.javahk.entity.User">
+        select * from users where id = #{id}
+    </select>
+    <insert id="register" parameterType="com.example.javahk.entity.User">
+        insert into users(id, password, type)
+        values (#{id}, #{password}, #{type})
+    </insert>
 </mapper>

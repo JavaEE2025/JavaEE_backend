@@ -17,4 +17,6 @@ public interface UserMapper {
     User findUser(int id);
     //登录
     User login(int id, String password, String type);
+    //注册
+    int register(int id,String password,String type);
 }
