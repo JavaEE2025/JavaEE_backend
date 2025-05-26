@@ -1,4 +1,4 @@
-package com.example.javahk.entity;
+package com.buaa.javahuikao.entity;
 import java.time.LocalDateTime;
 import java.time.Duration;
 /**

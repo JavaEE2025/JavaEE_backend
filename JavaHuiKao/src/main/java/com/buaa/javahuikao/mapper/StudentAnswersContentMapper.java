@@ -1,6 +1,6 @@
-package com.example.javahk.mapper;
+package com.buaa.javahuikao.mapper;
 
-import com.example.javahk.entity.StudentAnswersContent;
+import com.buaa.javahuikao.entity.StudentAnswersContent;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

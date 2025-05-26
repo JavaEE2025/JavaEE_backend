@@ -1,6 +1,6 @@
-package com.example.javahk.mapper;
+package com.buaa.javahuikao.mapper;
 
-import com.example.javahk.entity.Question;
+import com.buaa.javahuikao.entity.Question;
 
 /**
  * @Author: sxq

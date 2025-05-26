@@ -1,4 +1,4 @@
-package com.example.javahk.controller;
+package com.buaa.javahuikao.controller;
 
 /**
  * @Author: sxq
@@ -6,7 +6,7 @@ package com.example.javahk.controller;
  * @Description:
  */
 
-import com.example.javahk.service.StudentAnswersContentService;
+import com.buaa.javahuikao.service.StudentAnswersContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;

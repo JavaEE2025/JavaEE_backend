@@ -1,4 +1,4 @@
-package com.example.javahk.entity;
+package com.buaa.javahuikao.entity;
 
 /**
  * @ClassName: Question

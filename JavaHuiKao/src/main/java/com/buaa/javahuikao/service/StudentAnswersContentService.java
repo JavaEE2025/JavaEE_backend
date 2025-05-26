@@ -1,4 +1,4 @@
-package com.example.javahk.service;
+package com.buaa.javahuikao.service;
 
 /**
  * @Author: sxq
@@ -6,8 +6,8 @@ package com.example.javahk.service;
  * @Description:
  */
 
-import com.example.javahk.entity.StudentAnswersContent;
-import com.example.javahk.mapper.StudentAnswersContentMapper;
+import com.buaa.javahuikao.entity.StudentAnswersContent;
+import com.buaa.javahuikao.mapper.StudentAnswersContentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
