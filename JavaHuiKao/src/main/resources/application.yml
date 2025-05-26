@@ -1,0 +1,48 @@
+# ========================
+# Spring Boot 应用配置
+# ========================
+server:
+  port: 8080              # 启动端口
+
+spring:
+  application:
+    name: java-huikao  # 应用名称
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/javahuikao # 赶紧租个云服务器吧
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#  sql:
+#    init:
+#      mode: always       # 每次启动都执行（在自己本地运行的时候设置，感觉用云数据库会冲突）
+#      schema-locations: classpath:sql/schema.sql
+#      data-locations: classpath:sql/data.sql
+
+  # 配置文件编码支持
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+# ========================
+# MyBatis 配置
+# ========================
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml   # 指定 Mapper XML 文件路径
+  type-aliases-package: com.buaa.javahuikao.entity # 实体类包路径
+  configuration:
+    map-underscore-to-camel-case: true          # 开启驼峰命名自动映射（user_name -> userName）
+    cache-enabled: false                         # 关闭一级缓存（可选）
+
+# ========================
+# 日志配置
+# ========================
+logging:
+  level:
+    com.buaa.javahuikao: debug
+    org.mybatis: debug       # 打印 MyBatis 执行的 SQL
+  file:
+    name: logs/app.log       # 指定日志输出文件（可选）

@@ -1,7 +1,7 @@
-package com.example.javahk.mapper;
+package com.buaa.javahuikao.mapper;
 
 
-import com.example.javahk.entity.User;
+import com.buaa.javahuikao.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

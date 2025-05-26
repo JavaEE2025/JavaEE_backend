@@ -3,13 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.javahk.mapper.UserMapper">
-    <select id="login"  resultType="com.example.javahk.entity.User">
+    <select id="login"  resultType="com.buaa.javahuikao.entity.User">
         select * from users where id = #{id} and password = #{password} and type = #{type}
     </select>
-    <select id="findUser"  resultType="com.example.javahk.entity.User">
+    <select id="findUser"  resultType="com.buaa.javahuikao.entity.User">
         select * from users where id = #{id}
     </select>
-    <insert id="register" parameterType="com.example.javahk.entity.User">
+    <insert id="register" parameterType="com.buaa.javahuikao.entity.User">
         insert into users(id, password, type)
         values (#{id}, #{password}, #{type})
     </insert>

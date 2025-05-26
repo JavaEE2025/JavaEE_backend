@@ -1,8 +1,8 @@
-package com.example.javahk.service;
+package com.buaa.javahuikao.service;
 
 
-import com.example.javahk.entity.User;
-import com.example.javahk.mapper.UserMapper;
+import com.buaa.javahuikao.entity.User;
+import com.buaa.javahuikao.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

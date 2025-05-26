@@ -1,8 +1,8 @@
-package com.example.javahk.controller;
+package com.buaa.javahuikao.controller;
 
 
-import com.example.javahk.entity.User;
-import com.example.javahk.service.UserService;
+import com.buaa.javahuikao.entity.User;
+import com.buaa.javahuikao.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;

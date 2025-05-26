@@ -1,13 +1,11 @@
-package com.example.javahk;
+package com.buaa.javahuikao;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JavaHkApplication {
-
+public class JavaHuiKaoApplication {
     public static void main(String[] args) {
-        SpringApplication.run(JavaHkApplication.class, args);
+        SpringApplication.run(JavaHuiKaoApplication.class, args);
     }
-
 }
