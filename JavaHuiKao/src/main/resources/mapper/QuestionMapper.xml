@@ -1,8 +1,46 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.javahuikao.mapper.QuestionMapper">
+
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id" parameterType="Question">
+        INSERT INTO questions
+            (topic, score, type, difficulty, parse, correct_answer, method, source)
+        VALUES
+            (#{topic}, #{score}, #{type}, #{difficulty}, #{parse}, #{correctAnswer}, #{method}, #{source})
+    </insert>
+
+    <insert id="insertQuestionKps" parameterType="map">
+        INSERT INTO question_kp(question_id, kp_id)
+        VALUES
+        <foreach collection="kpIds" item="kpId" separator=",">
+            (#{questionId}, #{kpId})
+        </foreach>
+    </insert>
+
+    <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.entity.Question">
+        <id property="id" column="id"/>
+        <result property="topic"       column="topic"/>
+        <result property="score"       column="score"/>
+        <result property="type"        column="type"/>
+        <result property="difficulty"  column="difficulty"/>
+        <result property="parse"       column="parse"/>
+        <result property="correctAnswer" column="correct_answer"/>
+        <result property="method"      column="method"/>
+        <result property="source"      column="source"/>
+        <!-- kps 需要在 Service 层二次查询填充 -->
+    </resultMap>
+
+    <select id="findAllQuestions" resultMap="QuestionWithKp">
+        SELECT * FROM questions
+    </select>
+
+    <select id="searchByKeyword" resultMap="QuestionWithKp">
+        SELECT *
+        FROM questions
+        WHERE MATCH(topic, method, source) AGAINST(#{keyword} IN NATURAL LANGUAGE MODE)
+    </select>
+
     <resultMap id="objectiveMap" type="com.buaa.javahuikao.dto.ObjectiveQuestionDTO">
         <id column="ID" property="ID" />
         <result column="question_id" property="question_id" />

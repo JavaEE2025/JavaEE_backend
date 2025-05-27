@@ -1,25 +1,26 @@
 package com.buaa.javahuikao.mapper;
 
 import com.buaa.javahuikao.entity.Question;
-import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
-import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
 
 import java.util.List;
 
 /**
- * @Author: sxq
- * @Date: 2025/5/26 20:30
- * @Description:
+ * @author: bush
+ * @date: 2025/5/27 16:10
+ * @description:
  */
 @Mapper
 public interface QuestionMapper {
-    // 新建题目
-    Question newQuestion();
 
-    //获取客观题信息
-    List<ObjectiveQuestionDTO> getObjectiveQuestions(int examId);
+    void insertQuestion(Question q);
+    void insertQuestionKps(@Param("questionId") Integer questionId,
+                          @Param("kpIds") List<Integer> kpIds);
 
-    //获取主观题信息
-    List<SubjectiveQuestionDTO> getSubjectiveQuestions(int examId);
+    List<Question> findAllQuestions();
+
+    List<Question> searchByKeyword(@Param("keyword") String keyword);
 }
