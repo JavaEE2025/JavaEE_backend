@@ -32,9 +32,11 @@ public class StudentAnswersContentController {
     public StudentAnswersContentController(StudentAnswersContentService studentAnswersContentService) {
         this.studentAnswersContentService = studentAnswersContentService;
     }
+
     @CrossOrigin
     @PostMapping({"/submit/answer"})
     public ResponseEntity<?> submitSingleAnswer(@RequestBody SingleAnswersContentDTO singleAnswersContentDTO) {
+        System.out.println("singleAnswersContentDTO:"+singleAnswersContentDTO);
         try{
             studentAnswersContentService.submitAnswer(singleAnswersContentDTO);
             return ResponseEntity.ok().build();

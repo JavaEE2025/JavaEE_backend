@@ -1,5 +1,6 @@
 package com.buaa.javahuikao.dto;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,5 +40,14 @@ public class AnswerDTO{
 
     public String getStringOptAns(){
         return  String.join(";", optionAnswers);
+    }
+
+    @Override
+    public String toString() {
+        return "AnswerDTO{" +
+                "textAnswer='" + textAnswer + '\'' +
+                ", imgAnswer=" + Arrays.toString(imgAnswer) +
+                ", optionAnswers=" + optionAnswers +
+                '}';
     }
 }
