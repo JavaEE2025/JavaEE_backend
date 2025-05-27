@@ -1,7 +1,7 @@
 package com.buaa.javahuikao.service.Impl;
 
 
-import com.buaa.javahuikao.mapper.ClassMapper;
+import com.buaa.javahuikao.mapper.ClassesMapper;
 import com.buaa.javahuikao.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,11 @@ import java.util.List;
 @Service
 public class ClassServiceImpl implements ClassService {
     @Autowired
-    private ClassMapper classMapper;
+    private ClassesMapper classesMapper;
 
     @Override
     public List<String> getClassListByExamId(int exam_id) {
-        return classMapper.getClassListByExamId(exam_id);
+        return classesMapper.getClassListByExamId(exam_id);
     }
+
 }

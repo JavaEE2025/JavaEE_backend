@@ -13,6 +13,6 @@ import java.util.List;
  */
 
 @Mapper
-public interface ClassMapper {
+public interface ClassesMapper {
     List<String> getClassListByExamId(int examId);
 }
