@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserMapper userMapper;
+
     public User login(int id,String password,String type){
         return userMapper.login(id,password,type);
     }
@@ -25,7 +26,7 @@ public class UserService {
         return userMapper.findUser(id) != null;
     }
 
-    public boolean register(int id, String password, String type) {
-        return userMapper.register(id,password,type)>0;
+    public boolean register(int id, String password, String type,String name,String email) {
+        return userMapper.register(id,password,type,name,email)>0;
     }
 }

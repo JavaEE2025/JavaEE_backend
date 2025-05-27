@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.javahuikao.mapper.MarkMapper">
+    <select id="getExamInfo"  resultType="com.buaa.javahuikao.entity.Exam">
+        select * from exams where id = #{exam_id}
+    </select>
+
+    <resultMap id="problemMarkMap" type="com.buaa.javahuikao.dto.ProblemMarkDTO">
+        <id column="student_id" property="student_id" />
+        <result column="student_name" property="student_name" />
+        <result column="score" property="score" />
+    </resultMap>
+
+    <select id="getMarkList" resultMap="problemMarkMap">
+        select users.id as student_id,users.username as student_name,sac.score as score
+        from student_answers_content as sac,users
+        where sac.student_id=users.id and sac.exam_id=#{examId} and sac.question_id=#{questionId}
+    </select>
+</mapper>

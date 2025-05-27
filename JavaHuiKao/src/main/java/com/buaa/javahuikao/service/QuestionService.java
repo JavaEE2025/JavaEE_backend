@@ -1,8 +1,12 @@
 package com.buaa.javahuikao.service;
 
+
 import com.buaa.javahuikao.entity.Kp;
 import com.buaa.javahuikao.entity.Question;
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageInfo
+
+import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
+import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
 
 import java.util.List;
 
@@ -22,4 +26,8 @@ public interface QuestionService {
     PageInfo<Question> getAllQuestions(int page, int size);
     // 根据关键词搜索问题
     PageInfo<Question> searchQuestions(String keyword, int page, int size);
+
+    List<ObjectiveQuestionDTO> getObjectiveQuestions(int examId);
+
+    List<SubjectiveQuestionDTO> getSubjectiveQuestions(int examId);
 }

@@ -40,4 +40,35 @@
         FROM questions
         WHERE MATCH(topic, method, source) AGAINST(#{keyword} IN NATURAL LANGUAGE MODE)
     </select>
+
+    <resultMap id="objectiveMap" type="com.buaa.javahuikao.dto.ObjectiveQuestionDTO">
+        <id column="ID" property="ID" />
+        <result column="question_id" property="question_id" />
+        <collection property="tags" ofType="string">
+            <result column="question_tags" property="tags" />
+        </collection>
+    </resultMap>
+
+    <select id="getObjectiveQuestions"  resultMap="objectiveMap">
+        select eq.number as ID,eq.question_id as question_id,kps.name as question_tags
+        from questions as qs,exam_question as eq,kps,question_kp as qk
+        where eq.exam_id=#{examId} and qs.type in ('single','multiple')
+        and qs.id=eq.question_id and qk.question_id=eq.question_id and kps.id=qk.kp_id
+    </select>
+
+    <resultMap id="subjectiveMap" type="com.buaa.javahuikao.dto.SubjectiveQuestionDTO">
+        <id column="ID" property="ID" />
+        <result column="question_id" property="question_id" />
+        <result column="process" property="process" />
+        <collection property="tags" ofType="string">
+            <result column="question_tags" property="tags" />
+        </collection>
+    </resultMap>
+
+    <select id="getSubjectiveQuestions"  resultMap="subjectiveMap">
+        select eq.number as ID,eq.question_id as question_id,eq.process as process,kps.name as question_tags
+        from questions as qs,exam_question as eq,kps,question_kp as qk
+        where eq.exam_id=#{examId} and qs.type in ('fill','answer')
+          and qs.id=eq.question_id and qk.question_id=eq.question_id and kps.id=qk.kp_id
+    </select>
 </mapper>
