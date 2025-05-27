@@ -11,13 +11,14 @@ package com.buaa.javahuikao.entity;
 public class User {
     private int id;
     private String username;
+    private String password;
     private String email;
     private Type type;
     private int student_class_id;
 
     public enum Type {
-        TEACHER("teacher"),
-        STUDENT("student");
+        teacher("teacher"),
+        student("student");
 
         private final String description;
 

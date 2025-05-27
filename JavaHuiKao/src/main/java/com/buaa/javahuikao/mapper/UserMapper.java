@@ -18,5 +18,5 @@ public interface UserMapper {
     //登录
     User login(int id, String password, String type);
     //注册
-    int register(int id,String password,String type);
+    int register(int id,String password,String type,String name,String email);
 }

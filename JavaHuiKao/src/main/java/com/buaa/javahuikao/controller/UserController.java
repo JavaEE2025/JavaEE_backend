@@ -54,9 +54,11 @@ public class UserController {
         int id=Integer.parseInt((String) registerMap.get("id"));
         String password=registerMap.get("password").toString();
         String type=registerMap.get("identification").toString();
+        String name=registerMap.get("name").toString();
+        String email=registerMap.get("email").toString();
         Map<String, Object> map = new HashMap();
         if(!this.userService.findUser(id)){
-            if(this.userService.register(id,password,type)){
+            if(this.userService.register(id,password,type,name,email)){
                 map.put("result",true);
                 map.put("message","注册成功:)");
             }else{

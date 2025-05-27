@@ -10,7 +10,11 @@ import com.buaa.javahuikao.service.StudentAnswersContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName: StudentAnswersContentController
@@ -27,5 +31,20 @@ public class StudentAnswersContentController {
     }
 //    @CrossOrigin
 //    @PostMapping({"/???"})
+
+    /**
+     * @description: 获取学生作答
+     * @date: 2025/5/27 9:58
+     **/
+    @CrossOrigin
+    @PostMapping({"/teacher/getAnswer"})
+    public Map<String, Object> examMarkOverall(@RequestBody Map<String, Object> answerMap) {
+        int exam_id = Integer.parseInt((String) answerMap.get("exam_id"));
+        int problem_id = Integer.parseInt((String) answerMap.get("problem_id"));
+        int student_id = Integer.parseInt((String) answerMap.get("student_id"));
+        Map<String, Object> map = new HashMap();
+        //TODO
+        return map;
+    }
 
 }
