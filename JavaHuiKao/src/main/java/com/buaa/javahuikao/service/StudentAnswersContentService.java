@@ -28,18 +28,19 @@ public class StudentAnswersContentService {
         this.studentAnswersContentMapper = studentAnswersContentMapper;
     }
 
-//    public int submitAnswer(SingleAnswersContentDTO dto) {
-//        StudentAnswersContent studentAnswersContent=new StudentAnswersContent();
-//        studentAnswersContent.setQuestionId(dto.getQuestionId());
+    public int submitAnswer(SingleAnswersContentDTO dto) {
+        StudentAnswersContent studentAnswersContent=new StudentAnswersContent();
+        studentAnswersContent.setQuestionId(dto.getQuestionId());
+        //TODO
 //        studentAnswersContent.setStudentAnswersId();
-//
-//        AnswerDTO answer= dto.getAnswer();
-//        studentAnswersContent.setTextAnswer(answer.getTextAnswer());
-//        studentAnswersContent.setImgAnswer(answer.getImgAnswer());
-//        studentAnswersContent.setOptionAnswer(answer.getStringOptAns());
-//
+
+        AnswerDTO answer= dto.getAnswer();
+        studentAnswersContent.setTextAnswer(answer.getTextAnswer());
+        studentAnswersContent.setImgAnswer(answer.getImgAnswer());
+        studentAnswersContent.setOptionAnswer(answer.getStringOptAns());
+        return 0;
 //        return studentAnswersContentMapper.submitAnswer(singleAnswersContentDTO);
-//    }
+    }
 
 
 }
