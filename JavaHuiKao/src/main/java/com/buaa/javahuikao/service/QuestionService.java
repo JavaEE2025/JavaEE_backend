@@ -3,7 +3,7 @@ package com.buaa.javahuikao.service;
 
 import com.buaa.javahuikao.entity.Kp;
 import com.buaa.javahuikao.entity.Question;
-import com.github.pagehelper.PageInfo
+import com.github.pagehelper.PageInfo;
 
 import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
 import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;

@@ -1,5 +1,7 @@
 package com.buaa.javahuikao.service.impl;
 
+import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
+import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
 import com.buaa.javahuikao.entity.Question;
 import com.buaa.javahuikao.entity.Kp;
 import com.buaa.javahuikao.mapper.KpMapper;
@@ -65,5 +67,15 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> list = questionMapper.searchByKeyword(keyword);
         list.forEach(q -> q.setKps(kpMapper.findByQuestionId(q.getId())));
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<ObjectiveQuestionDTO> getObjectiveQuestions(int examId) {
+        return questionMapper.getObjectiveQuestions(examId);
+    }
+
+    @Override
+    public List<SubjectiveQuestionDTO> getSubjectiveQuestions(int examId) {
+        return questionMapper.getSubjectiveQuestions(examId);
     }
 }
