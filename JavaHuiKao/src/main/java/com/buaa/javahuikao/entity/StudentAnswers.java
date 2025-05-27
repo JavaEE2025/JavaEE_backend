@@ -19,6 +19,8 @@ public class StudentAnswers {
     private boolean isFinal = false;
     private Double progress;
     private Double sumScore;
+    private String status;
+    private String abnormalBehaviors;
 
     public StudentAnswers() {}
 
@@ -35,4 +37,20 @@ public class StudentAnswers {
     public void setProgress(Double progress) { this.progress = progress; }
     public Double getSumScore() { return sumScore; }
     public void setSumScore(Double sumScore) { this.sumScore = sumScore; }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAbnormalBehaviors() {
+        return abnormalBehaviors;
+    }
+
+    public void setAbnormalBehaviors(String abnormalBehaviors) {
+        this.abnormalBehaviors = abnormalBehaviors;
+    }
 }

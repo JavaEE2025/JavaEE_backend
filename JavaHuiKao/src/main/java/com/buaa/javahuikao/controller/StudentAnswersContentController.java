@@ -6,10 +6,13 @@ package com.buaa.javahuikao.controller;
  * @Description:
  */
 
+import com.buaa.javahuikao.dto.SingleAnswersContentDTO;
 import com.buaa.javahuikao.service.StudentAnswersContentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,7 +28,16 @@ public class StudentAnswersContentController {
     public StudentAnswersContentController(StudentAnswersContentService studentAnswersContentService) {
         this.studentAnswersContentService = studentAnswersContentService;
     }
-//    @CrossOrigin
-//    @PostMapping({"/???"})
+    @CrossOrigin
+    @PostMapping({"/submit/answer"})
+    public ResponseEntity<?> submitSingleAnswer(@RequestBody SingleAnswersContentDTO singleAnswersContentDTO) {
+        try{
+            studentAnswersContentService.submitAnswer(singleAnswersContentDTO);
+            return ResponseEntity.ok().build();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }
