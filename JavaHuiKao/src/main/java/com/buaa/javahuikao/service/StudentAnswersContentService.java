@@ -6,6 +6,9 @@ package com.buaa.javahuikao.service;
  * @Description:
  */
 
+import com.buaa.javahuikao.dto.AnswerDTO;
+import com.buaa.javahuikao.dto.SingleAnswersContentDTO;
+import com.buaa.javahuikao.entity.StudentAnswers;
 import com.buaa.javahuikao.entity.StudentAnswersContent;
 import com.buaa.javahuikao.mapper.StudentAnswersContentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +28,18 @@ public class StudentAnswersContentService {
         this.studentAnswersContentMapper = studentAnswersContentMapper;
     }
 
-    public int submitAnswer(StudentAnswersContent studentAnswersContent) {
-        return studentAnswersContentMapper.submitAnswer(studentAnswersContent);
+    public int submitAnswer(SingleAnswersContentDTO dto) {
+        StudentAnswersContent studentAnswersContent=new StudentAnswersContent();
+        studentAnswersContent.setQuestionId(dto.getQuestionId());
+        //TODO
+//        studentAnswersContent.setStudentAnswersId();
+
+        AnswerDTO answer= dto.getAnswer();
+        studentAnswersContent.setTextAnswer(answer.getTextAnswer());
+        studentAnswersContent.setImgAnswer(answer.getImgAnswer());
+        studentAnswersContent.setOptionAnswer(answer.getStringOptAns());
+        return 0;
+//        return studentAnswersContentMapper.submitAnswer(singleAnswersContentDTO);
     }
 
 
