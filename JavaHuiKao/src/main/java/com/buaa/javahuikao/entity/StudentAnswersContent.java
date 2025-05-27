@@ -19,6 +19,8 @@ public class StudentAnswersContent {
     private byte[] imgAnswer;
     private String optionAnswer;
     private Double score;
+    private int exam_id;
+    private int student_id;
 
     public StudentAnswersContent() {}
 

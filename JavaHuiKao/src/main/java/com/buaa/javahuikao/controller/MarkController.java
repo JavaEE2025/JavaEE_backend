@@ -1,6 +1,7 @@
 package com.buaa.javahuikao.controller;
 
 
+import com.buaa.javahuikao.dto.ProblemMarkDTO;
 import com.buaa.javahuikao.entity.Exam;
 import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
 import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
@@ -94,9 +95,22 @@ public class MarkController {
     @PostMapping({"/teacher/problem_mark"})
     public Map<String, Object> problemMark(@RequestBody Map<String, Object> problemMarkMap) {
         int exam_id = Integer.parseInt((String) problemMarkMap.get("exam_id"));
-        int problem_id = Integer.parseInt((String) problemMarkMap.get("problem_id"));
+        int question_id = Integer.parseInt((String) problemMarkMap.get("problem_id"));
         Map<String, Object> map = new HashMap();
-        //TODO
+        try{
+            List<ProblemMarkDTO> markList=markService.genMarkList(exam_id,question_id);
+            for(ProblemMarkDTO problemMarkDTO:markList){
+                if(problemMarkDTO.getScore()==null){
+                    //已经有分数了
+                    problemMarkDTO.setMarked(false);
+                }else{
+                    problemMarkDTO.setMarked(true);
+                }
+            }
+            map.put("result",markList);
+        }catch (Exception e){
+            log.error("e: ", e);
+        }
         return map;
     }
 
@@ -108,7 +122,7 @@ public class MarkController {
     @PostMapping({"/teacher/submitScore"})
     public Map<String, Object> submitMark(@RequestBody Map<String, Object> submitMap) {
         int exam_id = Integer.parseInt((String) submitMap.get("exam_id"));
-        int problem_id = Integer.parseInt((String) submitMap.get("problem_id"));
+        int question_id = Integer.parseInt((String) submitMap.get("problem_id"));
         int student_id = Integer.parseInt((String) submitMap.get("student_id"));
         int score = Integer.parseInt((String) submitMap.get("score"));
         String comment= (String) submitMap.get("comment");

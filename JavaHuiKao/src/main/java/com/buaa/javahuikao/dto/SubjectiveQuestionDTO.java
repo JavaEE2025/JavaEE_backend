@@ -12,6 +12,7 @@ import java.util.List;
 
 public class SubjectiveQuestionDTO {
     private int ID;
+    private int question_id;
     private List<String> tags;
     private int process;
     private Boolean action;
@@ -32,6 +33,10 @@ public class SubjectiveQuestionDTO {
         return action;
     }
 
+    public int getQuestion_id() {
+        return question_id;
+    }
+
     public void setID(int ID) {
         this.ID = ID;
     }
@@ -46,5 +51,9 @@ public class SubjectiveQuestionDTO {
 
     public void setAction(Boolean action) {
         this.action = action;
+    }
+
+    public void setQuestion_id(int question_id) {
+        this.question_id = question_id;
     }
 }

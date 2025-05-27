@@ -17,9 +17,9 @@ public interface QuestionMapper {
     // 新建题目
     Question newQuestion();
 
-    //获取客观题判卷信息
+    //获取客观题信息
     List<ObjectiveQuestionDTO> getObjectiveQuestions(int examId);
 
-    //获取主观题判卷信息
+    //获取主观题信息
     List<SubjectiveQuestionDTO> getSubjectiveQuestions(int examId);
 }
