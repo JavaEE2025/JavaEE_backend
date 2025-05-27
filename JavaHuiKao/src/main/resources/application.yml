@@ -7,6 +7,8 @@ server:
 spring:
   application:
     name: java-huikao  # 应用名称
+  jackson:
+    property-naming-strategy: SNAKE_CASE  # 配置DTO中识别下划线式请求参数
 
   datasource:
     url: jdbc:mysql://121.36.92.225:3306/javahuikao # 赶紧租个云服务器吧

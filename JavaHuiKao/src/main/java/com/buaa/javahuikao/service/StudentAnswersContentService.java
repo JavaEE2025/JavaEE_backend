@@ -1,11 +1,5 @@
 package com.buaa.javahuikao.service;
 
-/**
- * @Author: sxq
- * @Date: 2025/5/26 20:47
- * @Description:
- */
-
 import com.buaa.javahuikao.dto.AnswerDTO;
 import com.buaa.javahuikao.dto.SingleAnswersContentDTO;
 import com.buaa.javahuikao.entity.StudentAnswers;
@@ -23,24 +17,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class StudentAnswersContentService {
     private final StudentAnswersContentMapper studentAnswersContentMapper;
+    private final StudentAnswersService studentAnswersService;
+
     @Autowired
-    public StudentAnswersContentService(StudentAnswersContentMapper studentAnswersContentMapper) {
+    public StudentAnswersContentService(
+            StudentAnswersContentMapper studentAnswersContentMapper,
+            StudentAnswersService studentAnswersService) {
         this.studentAnswersContentMapper = studentAnswersContentMapper;
+        this.studentAnswersService = studentAnswersService;
     }
 
     public int submitAnswer(SingleAnswersContentDTO dto) {
-        StudentAnswersContent studentAnswersContent=new StudentAnswersContent();
-        studentAnswersContent.setQuestionId(dto.getQuestionId());
-        //TODO
-//        studentAnswersContent.setStudentAnswersId();
+        int studentId =dto.getStudentId();
+        int examId = dto.getExamId();
+        int studentAnswersId = studentAnswersService.getStudentAnswersId(studentId, examId);
+
+        StudentAnswersContent content=new StudentAnswersContent();
+        content.setQuestionId(dto.getQuestionId());
+        content.setStudentAnswersId(studentAnswersId);
 
         AnswerDTO answer= dto.getAnswer();
-        studentAnswersContent.setTextAnswer(answer.getTextAnswer());
-        studentAnswersContent.setImgAnswer(answer.getImgAnswer());
-        studentAnswersContent.setOptionAnswer(answer.getStringOptAns());
-        return 0;
-//        return studentAnswersContentMapper.submitAnswer(singleAnswersContentDTO);
+        content.setTextAnswer(answer.getTextAnswer());
+        content.setImgAnswer(answer.getImgAnswer());
+        System.out.println("answer.getStringOptAns(): "+answer.getStringOptAns());
+        content.setOptionAnswer(answer.getStringOptAns());
+
+        return studentAnswersContentMapper.submitAnswer(content);
     }
-
-
 }

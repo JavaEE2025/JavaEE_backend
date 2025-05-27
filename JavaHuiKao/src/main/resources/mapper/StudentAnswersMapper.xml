@@ -6,7 +6,13 @@
     <select id="getRealPersonCnt"  resultType="java.lang.Integer">
         select COUNT(*) from student_answers where exam_id=#{examId} and status!='缺考'
     </select>
+
     <select id="getPrePersonCnt"  resultType="java.lang.Integer">
         select COUNT(*) from student_answers where exam_id=#{examId}
+    </select>
+
+    <select id="getStudentAnswersId" resultType="java.lang.Integer">
+        SELECT id FROM student_answers
+        WHERE student_id = #{studentId} AND exam_id = #{examId}
     </select>
 </mapper>

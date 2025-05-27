@@ -1,6 +1,5 @@
 package com.buaa.javahuikao.mapper;
 
-
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -17,4 +16,7 @@ public interface StudentAnswersMapper {
 
     //获取本应参加考试的人数
     int getPrePersonCnt(int examId);
+
+    //查找id
+    int getStudentAnswersId(int studentId, int examId);
 }

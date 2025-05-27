@@ -49,5 +49,15 @@ public class SingleAnswersContentDTO {
     public void setAnswer(AnswerDTO answer) {
         this.answer = answer;
     }
+
+    @Override
+    public String toString() {
+        return "SingleAnswersContentDTO{" +
+                "questionId=" + questionId +
+                ", studentId=" + studentId +
+                ", examId=" + examId +
+                ", answer=" + answer +
+                '}';
+    }
 }
 
