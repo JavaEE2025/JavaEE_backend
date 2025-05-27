@@ -1,4 +1,4 @@
-package com.buaa.javahuikao.service.Impl;
+package com.buaa.javahuikao.service.impl;
 
 
 import com.buaa.javahuikao.mapper.ClassesMapper;
