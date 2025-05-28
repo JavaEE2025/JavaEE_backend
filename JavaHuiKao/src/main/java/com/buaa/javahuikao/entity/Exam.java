@@ -21,6 +21,7 @@ public class Exam {
     private LocalDateTime startTime;
     private LocalTime duration;
     private boolean marked = false; //是否批改
+    private double sumScore; // 考试总分
 
     public Exam() {}
 
@@ -45,4 +46,12 @@ public class Exam {
     public void setDuration(LocalTime duration) { this.duration = duration; }
     public boolean isMarked() { return marked; }
     public void setMarked(boolean marked) { this.marked = marked; }
+
+    public double getSumScore() {
+        return sumScore;
+    }
+
+    public void setSumScore(double sumScore) {
+        this.sumScore = sumScore;
+    }
 }

@@ -5,12 +5,12 @@
 <mapper namespace="com.buaa.javahuikao.mapper.ExamMapper">
     <insert id="insertExam" useGeneratedKeys="true" keyProperty="id" parameterType="com.buaa.javahuikao.entity.Exam">
         INSERT INTO exams
-            (name, start_time, duration, marked)
+            (name, start_time, duration, marked, sum_score)
         VALUES
-            (#{name}, #{startTime}, #{duration}, #{marked})
+            (#{name}, #{startTime}, #{duration}, #{marked}, #{sumScore})
     </insert>
 
-    <insert id="insertExamClass" parameterType="map">
+    <insert id="insertExamClasses" parameterType="map">
         INSERT INTO exam_class(exam_id, class_id)
         VALUES
         <foreach collection="classIds" item="classId" separator=",">
@@ -18,12 +18,39 @@
         </foreach>
     </insert>
 
-    <insert id="insertExamQuestion" parameterType="map">
+    <insert id="insertExamQuestions" parameterType="map">
         INSERT INTO exam_question(exam_id, question_id, number, score)
         VALUES
         <foreach collection="questions" item="question" separator=",">
             (#{examId}, #{question.id}, #{question.number}, #{question.score})
         </foreach>
+    </insert>
+    
+    <select id="getInvolvedStudents" resultType="Integer">
+        select u.id
+        from users u
+        where u.student_class_id in
+        <foreach collection="classIds" item="classId" open="(" separator="," close=")">
+            #{classId}
+        </foreach>
+    </select>
+
+    <insert id="initStudentAnswers" parameterType="map">
+        INSERT INTO student_answers(exam_id, student_id)
+        VALUES
+        <foreach collection="studentIds" item="studentId" separator=",">
+            (#{examId}, #{studentId})
+        </foreach>
+    </insert>
+
+    <insert id="initStudentAnswersContent" parameterType="map">
+        INSERT INTO student_answers_content(exam_id, question_id, student_id)
+        VALUES
+            <foreach collection="questions" item="question" separator=",">
+                <foreach collection="studentIds" item="studentId" separator=",">
+                    (#{examId}, #{question.id}, #{studentId})
+                </foreach>
+            </foreach>
     </insert>
 
 
@@ -54,5 +81,45 @@
             exams e ON ec.exam_id = e.id
         WHERE
             c.teacher_id = #{userId}
+    </select>
+
+    <select id="getStudentExams" resultType="com.buaa.javahuikao.entity.Exam">
+        select e.id, e.name, e.start_time, e.duration, e.marked, e.sum_score
+        from exams e
+        join exam_class ec on e.id = ec.exam_id
+        join classes c on ec.class_id = c.id
+        join users u on c.id = u.student_class_id
+        where u.id = #{userId}
+    </select>
+    
+    <select id="getPendingExams" resultType="com.buaa.javahuikao.entity.Exam">
+        select e.id, e.name, e.start_time, e.duration, e.marked, e.sum_score
+        from exams e
+        join exam_class ec on e.id = ec.exam_id
+        join classes c on ec.class_id = c.id
+        join users u on c.id = u.student_class_id
+        where u.id = #{userId}
+        and e.start_time > now()
+    </select>
+    
+    <select id="getOngoingExams" resultType="com.buaa.javahuikao.entity.Exam">
+        select e.id, e.name, e.start_time, e.duration, e.marked, e.sum_score
+        from exams e
+        join exam_class ec on e.id = ec.exam_id
+        join classes c on ec.class_id = c.id
+        join users u on c.id = u.student_class_id
+        where u.id = #{userId}
+        and e.start_time &lt;= now()
+        and addtime(e.start_time, e.duration) > now()
+    </select>
+
+    <select id="getCompletedExams" resultType="com.buaa.javahuikao.entity.Exam">
+        select e.id, e.name, e.start_time, e.duration, e.marked, e.sum_score
+        from exams e
+        join exam_class ec on e.id = ec.exam_id
+        join classes c on ec.class_id = c.id
+        join users u on c.id = u.student_class_id
+        where u.id = #{userId}
+        and addtime(e.start_time, e.duration) &lt;= now()
     </select>
 </mapper>
