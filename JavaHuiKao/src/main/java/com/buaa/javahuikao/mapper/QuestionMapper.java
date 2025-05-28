@@ -1,11 +1,11 @@
 package com.buaa.javahuikao.mapper;
 
 import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
+import com.buaa.javahuikao.dto.QuestionKpDTO;
 import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
 import com.buaa.javahuikao.entity.Question;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 
 import java.util.List;
@@ -22,9 +22,9 @@ public interface QuestionMapper {
     void insertQuestionKps(@Param("questionId") Integer questionId,
                           @Param("kpIds") List<Integer> kpIds);
 
-    List<Question> findAllQuestions();
+    List<QuestionKpDTO> findAllQuestions();
 
-    List<Question> searchByKeyword(@Param("keyword") String keyword);
+    List<QuestionKpDTO> searchByKeyword(@Param("keyword") String keyword);
 
     //获取客观题信息
     List<ObjectiveQuestionDTO> getObjectiveQuestions(int examId);

@@ -1,13 +1,11 @@
 package com.buaa.javahuikao.controller;
 
+import com.buaa.javahuikao.dto.QuestionKpDTO;
 import com.buaa.javahuikao.entity.Question;
 import com.buaa.javahuikao.service.QuestionService;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,19 +32,19 @@ public class QuestionController {
     public Object getQuestions(@RequestBody Map<String, Object> requestBody) {
         int page = Integer.parseInt(requestBody.get("page").toString());
         int size = Integer.parseInt(requestBody.get("size").toString());
-        String keyword = requestBody.get("keyword") != null ? requestBody.get("keyword").toString() : null;
+        String keyword = requestBody.get("search") != null ? requestBody.get("search").toString() : null;
 
         if (keyword != null && !keyword.isEmpty()) {
-            return questionService.searchQuestions(keyword, page, size);
+            return questionService.searchQuestions("+" + keyword, page, size);
         } else {
             return questionService.getAllQuestions(page, size);
         }
     }
 
     @PostMapping("/createQuestion")
-    public Map<String, String> createQuestion(@RequestBody Question question) {
+    public Map<String, Object> createQuestion(@RequestBody QuestionKpDTO question) {
         Question createdQuestion = questionService.createQuestion(question);
         return Map.of("result", "问题创建成功",
-                      "questionId", String.valueOf(createdQuestion.getId()));
+                      "questionId", createdQuestion.getId());
     }
 }

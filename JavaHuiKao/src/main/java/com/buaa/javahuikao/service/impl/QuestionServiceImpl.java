@@ -1,8 +1,8 @@
 package com.buaa.javahuikao.service.impl;
 
 import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
+import com.buaa.javahuikao.dto.QuestionKpDTO;
 import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
-import com.buaa.javahuikao.entity.Question;
 import com.buaa.javahuikao.entity.Kp;
 import com.buaa.javahuikao.mapper.KpMapper;
 import com.buaa.javahuikao.mapper.QuestionMapper;
@@ -38,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question createQuestion(Question q) {
+    public QuestionKpDTO createQuestion(QuestionKpDTO q) {
         // 1. 插入 questions 表，生成主键 q.id
         questionMapper.insertQuestion(q);
         // 2. 如果有 kp 关联，批量插入 question_kp
@@ -53,18 +53,18 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PageInfo<Question> getAllQuestions(int page, int size) {
+    public PageInfo<QuestionKpDTO> getAllQuestions(int page, int size) {
         PageHelper.startPage(page, size);
-        List<Question> list = questionMapper.findAllQuestions();
+        List<QuestionKpDTO> list = questionMapper.findAllQuestions();
         // 二次填充 kps 列表
         list.forEach(q -> q.setKps(kpMapper.findByQuestionId(q.getId())));
         return new PageInfo<>(list);
     }
 
     @Override
-    public PageInfo<Question> searchQuestions(String keyword, int page, int size) {
+    public PageInfo<QuestionKpDTO> searchQuestions(String keyword, int page, int size) {
         PageHelper.startPage(page, size);
-        List<Question> list = questionMapper.searchByKeyword(keyword);
+        List<QuestionKpDTO> list = questionMapper.searchByKeyword(keyword);
         list.forEach(q -> q.setKps(kpMapper.findByQuestionId(q.getId())));
         return new PageInfo<>(list);
     }

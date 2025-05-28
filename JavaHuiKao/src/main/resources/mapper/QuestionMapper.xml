@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.javahuikao.mapper.QuestionMapper">
 
-    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id" parameterType="Question">
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id" parameterType="com.buaa.javahuikao.entity.Question">
         INSERT INTO questions
             (topic, score, type, difficulty, parse, correct_answer, method, source)
         VALUES
@@ -18,7 +18,7 @@
         </foreach>
     </insert>
 
-    <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.entity.Question">
+    <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.dto.QuestionKpDTO">
         <id property="id" column="id"/>
         <result property="topic"       column="topic"/>
         <result property="score"       column="score"/>
@@ -38,7 +38,7 @@
     <select id="searchByKeyword" resultMap="QuestionWithKp">
         SELECT *
         FROM questions
-        WHERE MATCH(topic, method, source) AGAINST(#{keyword} IN NATURAL LANGUAGE MODE)
+        WHERE MATCH(topic, method, source) AGAINST(#{keyword} IN BOOLEAN MODE)
     </select>
 
     <resultMap id="objectiveMap" type="com.buaa.javahuikao.dto.ObjectiveQuestionDTO">

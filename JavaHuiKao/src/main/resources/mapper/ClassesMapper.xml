@@ -6,4 +6,8 @@
     <select id="getClassListByExamId"  resultType="java.lang.String">
         select c.name from exam_class as ec ,classes as c where ec.class_id=c.id and exam_id = #{exam_id}
     </select>
+
+    <select id="getTeacherClasses" resultType="com.buaa.javahuikao.entity.Class">
+        select * from classes where teacher_id = #{userId}
+    </select>
 </mapper>

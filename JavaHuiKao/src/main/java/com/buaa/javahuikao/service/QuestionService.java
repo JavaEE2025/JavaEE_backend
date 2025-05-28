@@ -1,8 +1,8 @@
 package com.buaa.javahuikao.service;
 
 
+import com.buaa.javahuikao.dto.QuestionKpDTO;
 import com.buaa.javahuikao.entity.Kp;
-import com.buaa.javahuikao.entity.Question;
 import com.github.pagehelper.PageInfo;
 
 import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
@@ -21,11 +21,11 @@ public interface QuestionService {
     // 根据章节获取对应的知识点
     List<Kp> getKpsBySection(String section);
     // 创建问题
-    Question createQuestion(Question q);
+    QuestionKpDTO createQuestion(QuestionKpDTO q);
     // 获取所有问题
-    PageInfo<Question> getAllQuestions(int page, int size);
+    PageInfo<QuestionKpDTO> getAllQuestions(int page, int size);
     // 根据关键词搜索问题
-    PageInfo<Question> searchQuestions(String keyword, int page, int size);
+    PageInfo<QuestionKpDTO> searchQuestions(String keyword, int page, int size);
 
     List<ObjectiveQuestionDTO> getObjectiveQuestions(int examId);
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.javahuikao.mapper.ExamMapper">
+    <insert id="insertExam" useGeneratedKeys="true" keyProperty="id" parameterType="com.buaa.javahuikao.entity.Exam">
+        INSERT INTO exams
+            (name, start_time, duration, marked)
+        VALUES
+            (#{name}, #{startTime}, #{duration}, #{marked})
+    </insert>
+
+    <insert id="insertExamClass" parameterType="map">
+        INSERT INTO exam_class(exam_id, class_id)
+        VALUES
+        <foreach collection="classIds" item="classId" separator=",">
+            (#{examId}, #{classId})
+        </foreach>
+    </insert>
+
+    <insert id="insertExamQuestion" parameterType="map">
+        INSERT INTO exam_question(exam_id, question_id, number, score)
+        VALUES
+        <foreach collection="questions" item="question" separator=",">
+            (#{examId}, #{question.id}, #{question.number}, #{question.score})
+        </foreach>
+    </insert>
+
+
+    <resultMap id="ExamResultMap" type="com.buaa.javahuikao.dto.ExamDTO">
+        <id property="id" column="exam_id"/>
+        <result property="name" column="exam_name"/>
+        <result property="classId" column="class_id"/>
+        <result property="className" column="class_name"/>
+        <result property="startTime" column="start_time"/>
+        <result property="duration" column="duration"/>
+        <result property="marked" column="marked"/>
+    </resultMap>
+
+    <select id="getTeacherExams" resultMap="ExamResultMap">
+        SELECT
+            e.id AS exam_id,
+            e.name AS exam_name,
+            e.start_time,
+            e.duration,
+            e.marked,
+            c.id AS class_id,
+            c.name AS class_name
+        FROM
+            classes c
+                JOIN
+            exam_class ec ON c.id = ec.class_id
+                JOIN
+            exams e ON ec.exam_id = e.id
+        WHERE
+            c.teacher_id = #{userId}
+    </select>
+</mapper>

@@ -1,6 +1,8 @@
 package com.buaa.javahuikao.service;
 
 
+import com.buaa.javahuikao.entity.Class;
+
 import java.util.List;
 
 /**
@@ -12,4 +14,6 @@ import java.util.List;
 
 public interface ClassService {
     List<String> getClassListByExamId(int exam_id);
+
+    List<Class> getTeacherClasses(int userId);
 }
