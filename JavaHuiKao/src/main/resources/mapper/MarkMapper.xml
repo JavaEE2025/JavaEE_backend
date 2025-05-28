@@ -18,4 +18,55 @@
         from student_answers_content as sac,users
         where sac.student_id=users.id and sac.exam_id=#{examId} and sac.question_id=#{questionId}
     </select>
+
+    <update id="submitScore">
+        update student_answers_content
+        set score=#{score},comment=#{comment}
+        where exam_id=#{examId} and student_id=#{studentId} and question_id=#{questionId}
+    </update>
+
+    <select id="checkStillHave" resultType="java.lang.Integer">
+        select count(*)
+        from student_answers_content
+        where exam_id=#{examId} and score is null
+    </select>
+
+    <update id="updateProcess">
+        update exam_question
+        set process=process+1
+        where exam_id=#{examId} and question_id=#{questionId}
+    </update>
+
+    <select id="getQuestionInfo" resultType="map">
+        select eq.score as full_score,qs.topic as problem_topic
+        from questions as qs,exam_question as eq
+        where eq.question_id=#{questionId}
+        and eq.exam_id=#{examId}
+        and eq.question_id=qs.id
+    </select>
+
+    <select id="getAnswerBy2Id" resultType="map">
+        select text_answer as answer_text,img_answer as answer_image,student_id as student_id
+        from student_answers_content
+        where student_id=#{studentId}
+        and exam_id=#{examId}
+        and question_id=#{questionId}
+    </select>
+
+    <select id="getAnswerBy1Id" resultType="map">
+        select text_answer as answer_text,img_answer as answer_image,student_id as student_id
+        from student_answers_content
+        where exam_id=#{examId}
+        and question_id=#{questionId}
+        and score is null
+        limit 1
+    </select>
+
+    <select id="getAnswer" resultType="map">
+        select text_answer as answer_text,img_answer as answer_image,student_id as student_id,question_id as question_id
+        from student_answers_content
+        where exam_id=#{examId}
+        and score is null
+        limit 1
+    </select>
 </mapper>

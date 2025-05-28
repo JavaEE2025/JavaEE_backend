@@ -82,7 +82,7 @@ public class MarkController {
             }
             map.put("subjective", subjectiveQuestionDTOS);
         }catch (Exception e){
-            log.error("e: ", e);
+            log.error("markOverall: ", e);
         }
         return map;
     }
@@ -109,7 +109,7 @@ public class MarkController {
             }
             map.put("result",markList);
         }catch (Exception e){
-            log.error("e: ", e);
+            log.error("problemMark: ", e);
         }
         return map;
     }
@@ -124,11 +124,74 @@ public class MarkController {
         int exam_id = Integer.parseInt((String) submitMap.get("exam_id"));
         int question_id = Integer.parseInt((String) submitMap.get("problem_id"));
         int student_id = Integer.parseInt((String) submitMap.get("student_id"));
-        int score = Integer.parseInt((String) submitMap.get("score"));
+        float score = ((Number) submitMap.get("score")).floatValue();
         String comment= (String) submitMap.get("comment");
         Map<String, Object> map = new HashMap();
-        //TODO
+        try{
+            //提交成绩
+            Boolean result=markService.submitScore(exam_id,student_id,question_id,score,comment);
+            map.put("result",result);
+            if(result){
+                //更新process
+                markService.updateProcess(exam_id,question_id);
+            }
+            //查询是否还有没判的题
+            Boolean stillHave=markService.checkStillHave(exam_id);
+            map.put("stillHave",stillHave);
+        }catch (Exception e){
+            log.error("submitScore: ", e);
+        }
         return map;
+    }
+
+    /**
+     * @description: 模糊获取学生作答
+     * @date: 2025/5/27 9:58
+     **/
+    @CrossOrigin
+    @PostMapping({"/teacher/getAnswer"})
+    public Map<String, Object> getAnswer(@RequestBody Map<String, Object> answerMap) {
+        int exam_id = Integer.parseInt((String) answerMap.get("exam_id"));
+        int question_id=-1;
+        int student_id=-1;
+        if(answerMap.containsKey("problem_id")){
+            question_id= Integer.parseInt((String) answerMap.get("problem_id"));
+        }
+        if(answerMap.containsKey("student_id")){
+            student_id = Integer.parseInt((String) answerMap.get("student_id"));
+        }
+        try{
+            if(question_id!=-1&&student_id!=-1){
+                //获取特定学生的作答
+                //先获取题目信息
+                Map<String,Object> question_info=markService.getQuestionInfo(exam_id,question_id);
+                //再获取作答
+                Map<String,Object> answer=markService.getAnswerBy2Id(exam_id,question_id,student_id);
+                question_info.putAll(answer);
+                return question_info;
+            }else if(question_id != -1) {
+                //获取特定题目的作答
+                //先获取题目信息
+                Map<String,Object> question_info=markService.getQuestionInfo(exam_id,question_id);
+                //再获取作答
+                Map<String,Object> answer=markService.getAnswerBy1Id(exam_id,question_id);
+                question_info.putAll(answer);
+                return question_info;
+            }else{
+                //模糊获取
+                Map<String,Object> answer=markService.getAnswer(exam_id);
+                if(answer.containsKey("question_id")){
+                    int problem_id= (int) answer.get("question_id");
+                    Map<String,Object> question_info=markService.getQuestionInfo(exam_id,problem_id);
+                    answer.remove("question_id");
+                    answer.putAll(question_info);
+                    return answer;
+                }
+            }
+        }catch (Exception e){
+            log.error("getAnswer: ", e);
+        }
+        return null;
     }
 
     /**

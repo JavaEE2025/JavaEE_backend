@@ -8,6 +8,8 @@ package com.buaa.javahuikao.controller;
 
 import com.buaa.javahuikao.dto.SingleAnswersContentDTO;
 import com.buaa.javahuikao.service.StudentAnswersContentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import java.util.Map;
  */
 @RestController
 public class StudentAnswersContentController {
+    private static final Logger log = LoggerFactory.getLogger(StudentAnswersContentController.class);
     private final StudentAnswersContentService studentAnswersContentService;
     @Autowired
     public StudentAnswersContentController(StudentAnswersContentService studentAnswersContentService) {
@@ -45,21 +48,6 @@ public class StudentAnswersContentController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
-
-    /**
-     * @description: 获取学生作答
-     * @date: 2025/5/27 9:58
-     **/
-    @CrossOrigin
-    @PostMapping({"/teacher/getAnswer"})
-    public Map<String, Object> examMarkOverall(@RequestBody Map<String, Object> answerMap) {
-        int exam_id = Integer.parseInt((String) answerMap.get("exam_id"));
-        int problem_id = Integer.parseInt((String) answerMap.get("problem_id"));
-        int student_id = Integer.parseInt((String) answerMap.get("student_id"));
-        Map<String, Object> map = new HashMap();
-        //TODO
-        return map;
     }
 
 }
