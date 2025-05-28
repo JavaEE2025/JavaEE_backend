@@ -11,7 +11,7 @@ spring:
     property-naming-strategy: SNAKE_CASE  # 配置DTO中识别下划线式请求参数
 
   datasource:
-    url: jdbc:mysql://121.36.92.225:3306/javahuikao # 赶紧租个云服务器吧
+    url: jdbc:mysql://121.36.92.225:3306/javahuikao
     username: javaroot
     password: javahk25
     driver-class-name: com.mysql.cj.jdbc.Driver
