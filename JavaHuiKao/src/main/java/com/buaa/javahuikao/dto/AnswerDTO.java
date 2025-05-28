@@ -1,5 +1,8 @@
 package com.buaa.javahuikao.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.util.CollectionUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,9 +13,16 @@ import java.util.List;
  */
 
 public class AnswerDTO{
+    @JsonProperty("text_answer")
     private String textAnswer;
+    @JsonProperty("img_answer")
     private byte[] imgAnswer;
+    @JsonProperty("option_answers")
     private List<String> optionAnswers;
+    //string版本
+    private String stringOptionAnswer;
+
+    private Integer recordExists; // 用于标记记录存在
 
     public String getTextAnswer() {
         return textAnswer;
@@ -36,10 +46,16 @@ public class AnswerDTO{
 
     public void setOptionAnswers(List<String> optionAnswers) {
         this.optionAnswers = optionAnswers;
+        this.stringOptionAnswer = String.join(";", optionAnswers);
     }
 
-    public String getStringOptAns(){
-        return  String.join(";", optionAnswers);
+    public void setStringOptionAnswer(String stringOptionAnswer) {
+        this.stringOptionAnswer = stringOptionAnswer;
+        this.optionAnswers = Arrays.asList(stringOptionAnswer.split(";"));
+    }
+
+    public String getStringOptionAnswer() {
+        return stringOptionAnswer;
     }
 
     @Override
@@ -48,6 +64,13 @@ public class AnswerDTO{
                 "textAnswer='" + textAnswer + '\'' +
                 ", imgAnswer=" + Arrays.toString(imgAnswer) +
                 ", optionAnswers=" + optionAnswers +
+                ", stringOptionAnswer='" + stringOptionAnswer + '\'' +
                 '}';
+    }
+
+    public boolean isVoidAnswer(){
+        return (textAnswer == null || textAnswer.length() == 0)
+                && (imgAnswer == null || imgAnswer.length == 0)
+                && (stringOptionAnswer == null || stringOptionAnswer.length() == 0);
     }
 }

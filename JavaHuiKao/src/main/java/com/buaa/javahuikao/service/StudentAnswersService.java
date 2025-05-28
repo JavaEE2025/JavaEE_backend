@@ -21,14 +21,6 @@ public class StudentAnswersService {
         return studentAnswersMapper.getRealPersonCnt(examId);
     }
 
-    public int getStudentAnswersId(int studentId,int examId) {
-        System.out.println("studentId" + studentId);
-        System.out.println("examId" + examId);
-        int ret = studentAnswersMapper.getStudentAnswersId(studentId, examId);
-        System.out.println("ret" + ret);
-        return studentAnswersMapper.getStudentAnswersId(studentId, examId);
-    }
-
     public int getPrePersonCnt(int examId) {
         return studentAnswersMapper.getPrePersonCnt(examId);
     }

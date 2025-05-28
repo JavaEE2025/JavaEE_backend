@@ -1,6 +1,7 @@
 package com.buaa.javahuikao.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @className: StudentAnswersMapper
@@ -19,4 +20,11 @@ public interface StudentAnswersMapper {
 
     //查找id
     int getStudentAnswersId(int studentId, int examId);
+
+    void incrementProgress(@Param("studentId") int studentId,
+                           @Param("examId") int examId);
+
+    void decrementProgress(@Param("studentId") int studentId,
+                           @Param("examId") int examId);
+
 }
