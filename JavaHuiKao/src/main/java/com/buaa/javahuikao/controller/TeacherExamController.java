@@ -1,8 +1,10 @@
 package com.buaa.javahuikao.controller;
 
 import com.buaa.javahuikao.dto.ExamDTO;
+import com.buaa.javahuikao.dto.ExamQuestionDTO;
 import com.buaa.javahuikao.service.ClassService;
 import com.buaa.javahuikao.service.ExamService;
+import com.buaa.javahuikao.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class TeacherExamController {
 
     @Autowired
     private ExamService examService;
+
+    @Autowired
+    private QuestionService questionService;
 
     @PostMapping("/teacher/classes")
     public Object getTeacherClasses(@RequestBody Map<String, Integer> requestBody) {
@@ -53,5 +59,28 @@ public class TeacherExamController {
 
         ExamDTO createdExam = examService.createExam(examDTO);
         return Map.of("result", "考试创建成功", "examId", createdExam.getId());
+    }
+
+    @PostMapping("/questionsById")
+    public List<Map<String, Object>> getQuestionsById(@RequestBody Map<String, List<Integer>> requestBody) {
+        List<Map<String, Object>> results = new ArrayList<>();
+        questionService.getQuestionsByIds(requestBody.get("questionIds")).forEach(question -> {
+            List<Map<String, Object>> options = new ArrayList<>();
+            question.getOptions().forEach(option -> {
+                options.add(Map.of(
+                        "option_id", option.getId(),
+                        "content", option.getOption(),
+                        "is_correct", option.isCorrect()
+                ));
+            });
+            results.add(Map.of(
+                    "question_id", question.getId(),
+                    "topic", question.getTopic(),
+                    "type", question.getType().toString(),
+                    "score", question.getScore(),
+                    "options", options
+            ));
+        });
+        return results;
     }
 }

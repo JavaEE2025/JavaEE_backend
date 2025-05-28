@@ -8,9 +8,10 @@ import java.util.List;
 /**
  * @author: bush
  * @date: 2025/5/28 11:14
- * @description:
+ * @description: 带知识点和答案解析的题库数据，用于教师端展示题库
+ * 【注意】考试展示给学生用的请用 ExamQuestionDTO
  */
-public class QuestionKpDTO extends Question {
+public class QuestionDTO extends Question {
     List<Kp> kps;
 
     public List<Kp> getKps() {

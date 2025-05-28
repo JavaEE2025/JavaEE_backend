@@ -18,7 +18,7 @@
         </foreach>
     </insert>
 
-    <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.dto.QuestionKpDTO">
+    <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.dto.QuestionDTO">
         <id property="id" column="id"/>
         <result property="topic"       column="topic"/>
         <result property="score"       column="score"/>
@@ -70,5 +70,18 @@
         from questions as qs,exam_question as eq,kps,question_kp as qk
         where eq.exam_id=#{examId} and qs.type in ('fill','answer')
           and qs.id=eq.question_id and qk.question_id=eq.question_id and kps.id=qk.kp_id
+    </select>
+
+    <select id="getQuestionsByIds" resultType="com.buaa.javahuikao.entity.Question">
+        select id, topic, type, score from questions
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getOptionsByQuestionId" resultType="com.buaa.javahuikao.entity.Option">
+        SELECT * FROM options
+        WHERE question_id = #{questionId}
     </select>
 </mapper>

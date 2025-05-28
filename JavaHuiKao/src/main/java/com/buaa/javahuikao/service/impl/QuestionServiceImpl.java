@@ -1,9 +1,12 @@
 package com.buaa.javahuikao.service.impl;
 
+import com.buaa.javahuikao.dto.ExamQuestionDTO;
 import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
-import com.buaa.javahuikao.dto.QuestionKpDTO;
+import com.buaa.javahuikao.dto.QuestionDTO;
 import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
 import com.buaa.javahuikao.entity.Kp;
+import com.buaa.javahuikao.entity.Option;
+import com.buaa.javahuikao.entity.Question;
 import com.buaa.javahuikao.mapper.KpMapper;
 import com.buaa.javahuikao.mapper.QuestionMapper;
 import com.buaa.javahuikao.service.QuestionService;
@@ -12,6 +15,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +42,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionKpDTO createQuestion(QuestionKpDTO q) {
+    public QuestionDTO createQuestion(QuestionDTO q) {
         // 1. 插入 questions 表，生成主键 q.id
         questionMapper.insertQuestion(q);
         // 2. 如果有 kp 关联，批量插入 question_kp
@@ -53,20 +57,44 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PageInfo<QuestionKpDTO> getAllQuestions(int page, int size) {
+    public PageInfo<QuestionDTO> getAllQuestions(int page, int size) {
         PageHelper.startPage(page, size);
-        List<QuestionKpDTO> list = questionMapper.findAllQuestions();
+        List<QuestionDTO> list = questionMapper.findAllQuestions();
         // 二次填充 kps 列表
         list.forEach(q -> q.setKps(kpMapper.findByQuestionId(q.getId())));
         return new PageInfo<>(list);
     }
 
     @Override
-    public PageInfo<QuestionKpDTO> searchQuestions(String keyword, int page, int size) {
+    public PageInfo<QuestionDTO> searchQuestions(String keyword, int page, int size) {
         PageHelper.startPage(page, size);
-        List<QuestionKpDTO> list = questionMapper.searchByKeyword(keyword);
+        List<QuestionDTO> list = questionMapper.searchByKeyword(keyword);
         list.forEach(q -> q.setKps(kpMapper.findByQuestionId(q.getId())));
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<ExamQuestionDTO> getQuestionsByIds(List<Integer> ids) {
+        List<ExamQuestionDTO> result = new ArrayList<>();
+        questionMapper.getQuestionsByIds(ids).forEach(
+            q -> {
+                List<Option> options = new ArrayList<>();
+                if (q.getType() == Question.QuestionType.single || q.getType() == Question.QuestionType.multiple) {
+                    options = questionMapper.getOptionsByQuestionId(q.getId());
+                }
+                result.add(
+                    new ExamQuestionDTO(
+                        q.getId(),
+                        q.getTopic(),
+                        q.getScore(),
+                        q.getType(),
+                        options
+                    )
+                );
+            }
+        );
+        return result;
+
     }
 
     @Override
