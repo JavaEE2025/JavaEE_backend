@@ -54,7 +54,7 @@ public class TeacherExamController {
         examDTO.setStartTime(LocalDateTime.parse((String) requestBody.get("startTime"), dateTimeFormatter));
         examDTO.setDuration(LocalTime.parse((String) requestBody.get("duration"), timeFormatter));
 
-        examDTO.setClassIds((List<Integer>) requestBody.get("classIds"));
+        examDTO.setClassIds((List<Integer>) requestBody.get("classes"));
         examDTO.setQuestions((List<Map<String, Number>>) requestBody.get("questions"));
 
         ExamDTO createdExam = examService.createExam(examDTO);
