@@ -1,10 +1,7 @@
 package com.buaa.javahuikao.mapper;
 
 
-import com.buaa.javahuikao.dto.AllScoreDTO;
-import com.buaa.javahuikao.dto.QuestionDTO;
-import com.buaa.javahuikao.dto.ReportDTO;
-import com.buaa.javahuikao.dto.ScoreDTO;
+import com.buaa.javahuikao.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -29,11 +26,11 @@ public interface ScoreMapper {
 
     ReportDTO getDetailInfo(int examId, int studentId);
 
-    List<QuestionDTO> getSingleQuestion(int examId, int studentId);
+    List<QuestionsDTO> getSingleQuestion(int examId, int studentId);
 
-    List<QuestionDTO> getMultipleQuestion(int examId, int studentId);
+    List<QuestionsDTO> getMultipleQuestion(int examId, int studentId);
 
-    List<QuestionDTO> getFillQuestion(int examId, int studentId);
+    List<QuestionsDTO> getFillQuestion(int examId, int studentId);
 
-    List<QuestionDTO> getAnswerQuestion(int examId, int studentId);
+    List<QuestionsDTO> getAnswerQuestion(int examId, int studentId);
 }

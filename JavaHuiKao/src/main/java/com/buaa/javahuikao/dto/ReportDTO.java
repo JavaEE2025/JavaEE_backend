@@ -18,7 +18,7 @@ public class ReportDTO {
     private String student_name;
     private double totalScore;
     private double sum_score; // 满分
-    List<QuestionDTO> questions;
+    List<QuestionsDTO> questions;
 
     public double getSum_score(){
         return this.sum_score;
@@ -52,7 +52,7 @@ public class ReportDTO {
         this.totalScore = totalScore;
     }
 
-    public void setQuestions(List<QuestionDTO> questions) {
+    public void setQuestions(List<QuestionsDTO> questions) {
         this.questions = questions;
     }
 
@@ -80,7 +80,7 @@ public class ReportDTO {
         return totalScore;
     }
 
-    public List<QuestionDTO> getQuestions() {
+    public List<QuestionsDTO> getQuestions() {
         return questions;
     }
 }

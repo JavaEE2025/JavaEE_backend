@@ -1,10 +1,7 @@
 package com.buaa.javahuikao.service;
 
 
-import com.buaa.javahuikao.dto.AllScoreDTO;
-import com.buaa.javahuikao.dto.QuestionDTO;
-import com.buaa.javahuikao.dto.ReportDTO;
-import com.buaa.javahuikao.dto.ScoreDTO;
+import com.buaa.javahuikao.dto.*;
 
 import java.util.List;
 import java.util.Map;
@@ -28,11 +25,11 @@ public interface ScoreService {
 
     float getExcellentLine(int examId);
 
-    List<QuestionDTO> getSingleQuestion(int examId, int studentId);
+    List<QuestionsDTO> getSingleQuestion(int examId, int studentId);
 
-    List<QuestionDTO> getMultipleQuestion(int examId, int studentId);
+    List<QuestionsDTO> getMultipleQuestion(int examId, int studentId);
 
-    List<QuestionDTO> getFillQuestion(int examId, int studentId);
+    List<QuestionsDTO> getFillQuestion(int examId, int studentId);
 
-    List<QuestionDTO> getAnswerQuestion(int examId, int studentId);
+    List<QuestionsDTO> getAnswerQuestion(int examId, int studentId);
 }

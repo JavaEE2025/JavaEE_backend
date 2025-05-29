@@ -2,7 +2,7 @@ package com.buaa.javahuikao.controller;
 
 
 import com.buaa.javahuikao.dto.AllScoreDTO;
-import com.buaa.javahuikao.dto.QuestionDTO;
+import com.buaa.javahuikao.dto.QuestionsDTO;
 import com.buaa.javahuikao.dto.ReportDTO;
 import com.buaa.javahuikao.dto.ScoreDTO;
 import com.buaa.javahuikao.service.ScoreService;
@@ -78,13 +78,13 @@ public class ScoreController {
             reportDTO.setAccuracy(Math.round(accuracy*100 * 10) / 10.0);
             // 获取questions
             //单选
-            List<QuestionDTO> singleQuestion=scoreService.getSingleQuestion(exam_id,student_id);
+            List<QuestionsDTO> singleQuestion=scoreService.getSingleQuestion(exam_id,student_id);
             //多选
-            List<QuestionDTO> multipleQuestion=scoreService.getMultipleQuestion(exam_id,student_id);
+            List<QuestionsDTO> multipleQuestion=scoreService.getMultipleQuestion(exam_id,student_id);
             //填空
-            List<QuestionDTO> fillQuestion=scoreService.getFillQuestion(exam_id,student_id);
+            List<QuestionsDTO> fillQuestion=scoreService.getFillQuestion(exam_id,student_id);
             //大题
-            List<QuestionDTO> answerQuestion=scoreService.getAnswerQuestion(exam_id,student_id);
+            List<QuestionsDTO> answerQuestion=scoreService.getAnswerQuestion(exam_id,student_id);
             singleQuestion.addAll(multipleQuestion);
             singleQuestion.addAll(fillQuestion);
             singleQuestion.addAll(answerQuestion);

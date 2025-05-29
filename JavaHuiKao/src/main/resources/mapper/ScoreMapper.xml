@@ -133,7 +133,7 @@
         private double yourRate;
         private List<OptionContent> options;
     -->
-    <resultMap id="SingleMap" type="com.buaa.javahuikao.dto.QuestionDTO">
+    <resultMap id="SingleMap" type="com.buaa.javahuikao.dto.QuestionsDTO">
         <id column="id" property="id" />
         <result column="topic" property="topic" />
         <result column="parse" property="parse" />
@@ -146,7 +146,7 @@
         <result column="class_rate" property="classRate" />
         <result column="yourRate" property="yourRate" />
         <result column="hasCorrect" property="hasCorrect" />
-        <collection property="options" ofType="com.buaa.javahuikao.dto.QuestionDTO$OptionContent">
+        <collection property="options" ofType="com.buaa.javahuikao.dto.QuestionsDTO$OptionContent">
             <result column="optionContent" property="content" />
         </collection>
     </resultMap>
@@ -190,7 +190,7 @@
     </select>
 
     <!--    多选-->
-    <resultMap id="MultipleMap" type="com.buaa.javahuikao.dto.QuestionDTO">
+    <resultMap id="MultipleMap" type="com.buaa.javahuikao.dto.QuestionsDTO">
         <id column="id" property="id" />
         <result column="topic" property="topic" />
         <result column="parse" property="parse" />
@@ -201,7 +201,7 @@
         <result column="class_rate" property="classRate" />
         <result column="yourRate" property="yourRate" />
         <result column="hasCorrect" property="hasCorrect" />
-        <collection property="options" ofType="com.buaa.javahuikao.dto.QuestionDTO$OptionContent">
+        <collection property="options" ofType="com.buaa.javahuikao.dto.QuestionsDTO$OptionContent">
             <result column="optionContent" property="content" />
         </collection>
         <collection property="answers" ofType="java.lang.String">
@@ -268,7 +268,7 @@
     </select>
 
     <!--  填空  -->
-    <resultMap id="FillMap" type="com.buaa.javahuikao.dto.QuestionDTO">
+    <resultMap id="FillMap" type="com.buaa.javahuikao.dto.QuestionsDTO">
         <id column="id" property="id" />
         <result column="topic" property="topic" />
         <result column="comment" property="comment" />
@@ -315,7 +315,7 @@
     </select>
 
     <!--  简答  -->
-    <resultMap id="AnswerMap" type="com.buaa.javahuikao.dto.QuestionDTO">
+    <resultMap id="AnswerMap" type="com.buaa.javahuikao.dto.QuestionsDTO">
         <id column="id" property="id" />
         <result column="topic" property="topic" />
         <result column="comment" property="comment" />
