@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.javahuikao.mapper.QuestionMapper">
 
-    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id" parameterType="Question">
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id" parameterType="com.buaa.javahuikao.entity.Question">
         INSERT INTO questions
             (topic, score, type, difficulty, parse, correct_answer, method, source)
         VALUES
@@ -18,7 +18,7 @@
         </foreach>
     </insert>
 
-    <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.entity.Question">
+    <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.dto.QuestionDTO">
         <id property="id" column="id"/>
         <result property="topic"       column="topic"/>
         <result property="score"       column="score"/>
@@ -38,7 +38,7 @@
     <select id="searchByKeyword" resultMap="QuestionWithKp">
         SELECT *
         FROM questions
-        WHERE MATCH(topic, method, source) AGAINST(#{keyword} IN NATURAL LANGUAGE MODE)
+        WHERE MATCH(topic, method, source) AGAINST(#{keyword} IN BOOLEAN MODE)
     </select>
 
     <resultMap id="objectiveMap" type="com.buaa.javahuikao.dto.ObjectiveQuestionDTO">
@@ -70,5 +70,18 @@
         from questions as qs,exam_question as eq,kps,question_kp as qk
         where eq.exam_id=#{examId} and qs.type in ('fill','answer')
           and qs.id=eq.question_id and qk.question_id=eq.question_id and kps.id=qk.kp_id
+    </select>
+
+    <select id="getQuestionsByIds" resultType="com.buaa.javahuikao.entity.Question">
+        select id, topic, type, score from questions
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getOptionsByQuestionId" resultType="com.buaa.javahuikao.entity.Option">
+        SELECT * FROM options
+        WHERE question_id = #{questionId}
     </select>
 </mapper>

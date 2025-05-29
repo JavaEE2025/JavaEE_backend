@@ -1,6 +1,7 @@
 package com.buaa.javahuikao.service.impl;
 
 
+import com.buaa.javahuikao.entity.Class;
 import com.buaa.javahuikao.mapper.ClassesMapper;
 import com.buaa.javahuikao.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,4 +26,8 @@ public class ClassServiceImpl implements ClassService {
         return classesMapper.getClassListByExamId(exam_id);
     }
 
+    @Override
+    public List<Class> getTeacherClasses(int userId) {
+        return classesMapper.getTeacherClasses(userId);
+    }
 }
