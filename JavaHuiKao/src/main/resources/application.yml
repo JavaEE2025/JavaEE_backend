@@ -8,7 +8,7 @@ spring:
   application:
     name: java-huikao  # 应用名称
   jackson:
-    property-naming-strategy: SNAKE_CASE  # 配置DTO中识别下划线式请求参数
+#    property-naming-strategy: SNAKE_CASE  # 配置DTO中识别下划线式请求参数
 
   datasource:
     url: jdbc:mysql://121.36.92.225:3306/javahuikao
@@ -29,7 +29,7 @@ mybatis:
   mapper-locations: classpath:mapper/**/*.xml   # 指定 Mapper XML 文件路径
   type-aliases-package: com.buaa.javahuikao.entity # 实体类包路径
   configuration:
-    map-underscore-to-camel-case: true          # 开启驼峰命名自动映射（user_name -> userName）
+#    map-underscore-to-camel-case: true          # 开启驼峰命名自动映射（user_name -> userName）
     cache-enabled: false                         # 关闭一级缓存（可选）
 
 # ========================

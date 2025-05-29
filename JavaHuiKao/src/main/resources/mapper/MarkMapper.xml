@@ -69,4 +69,77 @@
         and score is null
         limit 1
     </select>
+
+    <update id="updateMarked">
+        update exams
+        set marked=true
+        where id=#{examId}
+    </update>
+
+    <update id="computeSumScore">
+        UPDATE student_answers as  sa
+        SET sa.sum_score = (
+            SELECT SUM(sac.score)
+            FROM student_answers_content as sac
+            WHERE sac.student_id = sa.student_id
+            AND sac.exam_id = sa.exam_id
+            AND sac.score IS NOT NULL
+        )
+        WHERE EXISTS (
+            SELECT 1 FROM student_answers_content sac
+            WHERE sac.student_id = sa.student_id
+            AND sac.exam_id = sa.exam_id
+            AND sa.status!='缺考'
+        );
+    </update>
+
+    <update id="markSingle">
+        UPDATE student_answers_content as sac,questions as qs,exam_question as eq
+        SET sac.score =
+            CASE
+            WHEN qs.correct_answer = sac.option_answer THEN eq.score
+            ELSE 0
+        END
+        WHERE sac.exam_id=#{examId}
+            AND sac.question_id=qs.id
+            AND sac.question_id=eq.question_id
+            AND eq.exam_id=#{examId}
+            AND qs.type='single'
+    </update>
+
+    <resultMap id="Multiple" type="com.buaa.javahuikao.entity.Question">
+        <id column="id" property="id" />
+        <result column="score" property="score" />
+    </resultMap>
+
+    <select id="getAllMultiple" resultMap="Multiple">
+        select qs.id,eq.score
+        from exam_question as eq,questions as qs
+        where eq.exam_id=#{examId}
+            AND eq.question_id=qs.id
+            AND qs.type='multiple'
+    </select>
+
+    <select id="getOption" resultType="com.buaa.javahuikao.entity.Option">
+        select id,is_correct
+        from options
+        where question_id=#{questionId}
+    </select>
+
+    <select id="getAnswerList" resultType="com.buaa.javahuikao.entity.StudentAnswersContent">
+        select student_id,option_answer
+        from student_answers_content
+        where exam_id=#{examId}
+            AND question_id=#{questionId}
+    </select>
+
+    <update id="updateMultiple">
+        <foreach collection="scoreList.entrySet()" item="entry" separator=";">
+            UPDATE student_answers_content
+            SET score = #{entry.value}
+            WHERE exam_id = #{examId}
+            AND question_id = #{questionId}
+            AND student_id = #{entry.key}
+        </foreach>
+    </update>
 </mapper>

@@ -3,6 +3,9 @@ package com.buaa.javahuikao.mapper;
 
 import com.buaa.javahuikao.dto.ProblemMarkDTO;
 import com.buaa.javahuikao.entity.Exam;
+import com.buaa.javahuikao.entity.Option;
+import com.buaa.javahuikao.entity.Question;
+import com.buaa.javahuikao.entity.StudentAnswersContent;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -43,4 +46,25 @@ public interface MarkMapper{
 
     //获取题目信息
     Map<String, Object> getQuestionInfo(int examId, int questionId);
+
+    //更新marked是否批改完成状态
+    void updateMarked(int examId);
+
+    //计算总分
+    void computeSumScore(int examId);
+
+    //自动判单选
+    void markSingle(int examId);
+
+    //获取所有的多选题
+    List<Question> getAllMultiple(int examId);
+
+    //获取选项
+    List<Option> getOption(int questionId);
+
+    //获取所有学生作答
+    List<StudentAnswersContent> getAnswerList(int examId, int questionId);
+
+    //更新多选题分数
+    void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId);
 }

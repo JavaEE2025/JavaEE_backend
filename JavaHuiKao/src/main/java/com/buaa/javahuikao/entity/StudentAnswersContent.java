@@ -37,4 +37,20 @@ public class StudentAnswersContent {
     public void setOptionAnswer(String optionAnswer) { this.optionAnswer = optionAnswer; }
     public Double getScore() { return score; }
     public void setScore(Double score) { this.score = score; }
+
+    public int getExam_id() {
+        return exam_id;
+    }
+
+    public int getStudent_id() {
+        return student_id;
+    }
+
+    public void setExam_id(int exam_id) {
+        this.exam_id = exam_id;
+    }
+
+    public void setStudent_id(int student_id) {
+        this.student_id = student_id;
+    }
 }

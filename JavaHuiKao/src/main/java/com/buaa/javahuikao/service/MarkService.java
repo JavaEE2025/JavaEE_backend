@@ -3,6 +3,9 @@ package com.buaa.javahuikao.service;
 
 import com.buaa.javahuikao.dto.ProblemMarkDTO;
 import com.buaa.javahuikao.entity.Exam;
+import com.buaa.javahuikao.entity.Option;
+import com.buaa.javahuikao.entity.Question;
+import com.buaa.javahuikao.entity.StudentAnswersContent;
 import com.buaa.javahuikao.mapper.MarkMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,4 +40,18 @@ public interface MarkService {
     Map<String, Object> getAnswer(int examId);
 
     Map<String, Object> getQuestionInfo(int examId, int questionId);
+
+    void updateMarked(int examId);
+
+    void computeSumScore(int examId);
+
+    void markSingle(int examId);
+
+    List<Question> getAllMultiple(int examId);
+
+    List<Option> getOption(int questionId);
+
+    List<StudentAnswersContent> getAnswerList(int examId, int questionId);
+
+    void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId);
 }

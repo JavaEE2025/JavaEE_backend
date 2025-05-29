@@ -5,6 +5,9 @@ import com.buaa.javahuikao.dto.ProblemMarkDTO;
 import com.buaa.javahuikao.entity.Exam;
 import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
 import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
+import com.buaa.javahuikao.entity.Option;
+import com.buaa.javahuikao.entity.Question;
+import com.buaa.javahuikao.entity.StudentAnswersContent;
 import com.buaa.javahuikao.service.ClassService;
 import com.buaa.javahuikao.service.MarkService;
 import com.buaa.javahuikao.service.QuestionService;
@@ -17,9 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @className: MarkController
@@ -138,6 +143,10 @@ public class MarkController {
             //查询是否还有没判的题
             Boolean stillHave=markService.checkStillHave(exam_id);
             map.put("stillHave",stillHave);
+            if(!stillHave){
+                //没有没判完的题了，修改状态，计算总分
+                computeSumScore(exam_id);
+            }
         }catch (Exception e){
             log.error("submitScore: ", e);
         }
@@ -199,6 +208,53 @@ public class MarkController {
      * @date: 2025/5/27 20:27
      **/
     public void autoMarkObjective(int exam_id){
-        //TODO
+        //TODO:考试结束之后自动调用判客观题
+        //单选
+        markService.markSingle(exam_id);
+        //多选
+        List<Question> questions=markService.getAllMultiple(exam_id);
+        for(Question question:questions){
+            double score=question.getScore();
+            int question_id=question.getId();
+            List<Option> options=markService.getOption(question_id);
+            List<Integer> correctOptionIds = options.stream()
+                    .filter(Option::isCorrect)
+                    .map(Option::getId)
+                    .toList();
+            List<StudentAnswersContent> studentAnswersContents=markService.getAnswerList(exam_id,question_id);
+            Map<Integer, Double> scoreList=new HashMap<>();
+            for(StudentAnswersContent studentAnswersContent:studentAnswersContents){
+                List<String> studentAnswer = Arrays.asList(studentAnswersContent.getOptionAnswer().split(";"));
+                List<Integer> studentSelectedIds = studentAnswer.stream()
+                        .map(Integer::valueOf)
+                        .toList();
+
+                double calculatedScore = 0.0;
+                boolean hasWrongOption = studentSelectedIds.stream()
+                        .anyMatch(id -> !correctOptionIds.contains(id));
+                if (hasWrongOption) {
+                    calculatedScore = 0.0;
+                } else if (studentSelectedIds.size() == correctOptionIds.size()) {
+                    calculatedScore = score;
+                } else if (studentSelectedIds.size() < correctOptionIds.size()) {
+                    calculatedScore = Math.round(score * 2 / 3 * 10) / 10.0;
+                }
+
+                scoreList.put(studentAnswersContent.getStudent_id(), calculatedScore);
+            }
+            //将得分结果更新到数据库
+            markService.updateMultiple(scoreList,question_id,exam_id);
+        }
+    }
+
+    /**
+     * @description: 阅卷完成，修改状态，计算总分
+     * @date: 2025/5/28 16:01
+     **/
+    public void computeSumScore(int examId) {
+        //修改状态
+        markService.updateMarked(examId);
+        //计算总分
+        markService.computeSumScore(examId);
     }
 }

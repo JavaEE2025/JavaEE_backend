@@ -3,6 +3,9 @@ package com.buaa.javahuikao.service.impl;
 
 import com.buaa.javahuikao.dto.ProblemMarkDTO;
 import com.buaa.javahuikao.entity.Exam;
+import com.buaa.javahuikao.entity.Option;
+import com.buaa.javahuikao.entity.Question;
+import com.buaa.javahuikao.entity.StudentAnswersContent;
 import com.buaa.javahuikao.mapper.MarkMapper;
 import com.buaa.javahuikao.service.MarkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +69,40 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public Map<String, Object> getQuestionInfo(int examId, int questionId) {
         return markMapper.getQuestionInfo(examId,questionId);
+    }
+
+    @Override
+    public void updateMarked(int examId) {
+        markMapper.updateMarked(examId);
+    }
+
+    @Override
+    public void computeSumScore(int examId) {
+        markMapper.computeSumScore(examId);
+    }
+
+    @Override
+    public void markSingle(int examId) {
+        markMapper.markSingle(examId);
+    }
+
+    @Override
+    public List<Question> getAllMultiple(int examId) {
+        return markMapper.getAllMultiple(examId);
+    }
+
+    @Override
+    public List<Option> getOption(int questionId) {
+        return markMapper.getOption(questionId);
+    }
+
+    @Override
+    public List<StudentAnswersContent> getAnswerList(int examId, int questionId) {
+        return markMapper.getAnswerList(examId,questionId);
+    }
+
+    @Override
+    public void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId) {
+        markMapper.updateMultiple(scoreList,questionId,examId);
     }
 }
