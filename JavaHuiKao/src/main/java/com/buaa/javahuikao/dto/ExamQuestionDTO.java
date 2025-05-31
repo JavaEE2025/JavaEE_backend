@@ -24,6 +24,7 @@ public class ExamQuestionDTO {
         this.type = type;
         this.options = options;
     }
+    public ExamQuestionDTO() {}
 
     public int getId() {
         return id;

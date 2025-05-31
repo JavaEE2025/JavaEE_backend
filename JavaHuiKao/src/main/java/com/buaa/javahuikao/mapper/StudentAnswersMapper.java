@@ -1,5 +1,6 @@
 package com.buaa.javahuikao.mapper;
 
+import com.buaa.javahuikao.entity.StudentAnswers;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,10 +22,18 @@ public interface StudentAnswersMapper {
     //查找id
     int getStudentAnswersId(int studentId, int examId);
 
-    void incrementProgress(@Param("studentId") int studentId,
+    //答题进度修改
+    int incrementProgress(@Param("studentId") int studentId,
                            @Param("examId") int examId);
 
-    void decrementProgress(@Param("studentId") int studentId,
+    int decrementProgress(@Param("studentId") int studentId,
                            @Param("examId") int examId);
 
+    //学生交卷
+    void submitExam (int examId,int studentId);
+
+    //开始考试
+    void beginExam (int examId,int studentId);
+    //出现异常状态
+    void addAbnormalBehavior(int examId,int studentId,String behavior);
 }

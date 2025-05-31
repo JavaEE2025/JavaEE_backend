@@ -33,4 +33,5 @@ public interface QuestionService {
     List<ObjectiveQuestionDTO> getObjectiveQuestions(int examId);
 
     List<SubjectiveQuestionDTO> getSubjectiveQuestions(int examId);
+
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.javahuikao.mapper.ExamQuestionMapper">
+    <select id="getExamQuestions" resultMap="studentExamQuestionResultMap">
+        SELECT
+            e.name AS exam_name,
+            e.start_time AS exam_start_time,
+            e.duration AS exam_duration,
+            q.id AS question_id,
+            q.topic AS question_topic,
+            q.score AS question_score,
+            q.type AS question_type,
+            o.id AS option_id,
+            o.option AS option_content
+        FROM
+            exams e
+                JOIN
+            exam_question eq ON e.id = eq.exam_id
+                JOIN
+            questions q ON eq.question_id = q.id
+                LEFT JOIN
+            options o ON q.id = o.question_id AND (q.type = 'single' OR q.type = 'multiple')
+        WHERE
+            e.id = #{examId}
+        ORDER BY
+            q.id, o.id
+    </select>
+
+    <resultMap id="studentExamQuestionResultMap" type="com.buaa.javahuikao.dto.StudentExamQuestionDTO">
+        <result property="name" column="exam_name"/>
+        <result property="start_time" column="exam_start_time"/>
+        <result property="duration" column="exam_duration"/>
+        <collection property="questions" ofType="com.buaa.javahuikao.dto.ExamQuestionDTO" resultMap="questionResultMap"/>
+    </resultMap>
+
+    <resultMap id="questionResultMap" type="com.buaa.javahuikao.dto.ExamQuestionDTO">
+        <id property="id" column="question_id"/>
+        <result property="topic" column="question_topic"/>
+        <result property="score" column="question_score"/>
+        <result property="type" column="question_type" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <collection property="options" ofType="com.buaa.javahuikao.entity.Option">
+            <id property="id" column="option_id"/>
+            <result property="option" column="option_content"/>
+            <result property="questionId" column="question_id"/>
+        </collection>
+    </resultMap>
+</mapper>

@@ -122,4 +122,29 @@
         where u.id = #{userId}
         and addtime(e.start_time, e.duration) &lt;= now()
     </select>
+
+    <!--  超级无敌连表查询参考学生状态  -->
+    <select id="getAllStudentStatusByExamId" resultType="com.buaa.javahuikao.dto.StatusInfoDTO">
+        SELECT
+            u.id AS student_id,
+            u.username AS name,
+            sa.status AS status,
+            sa.progress AS progress,
+            sa.abnormal_behaviors AS abnormalBehaviors
+        FROM
+            exam_class ec
+                JOIN
+            users u ON ec.class_id = u.student_class_id
+                LEFT JOIN
+            student_answers sa ON u.id = sa.student_id AND sa.exam_id = #{examId}
+        WHERE
+            ec.exam_id = #{examId}
+    </select>
+
+        <!--  查找参加考试的班级列表  -->
+        <select id="getClassIdsByExamId" resultType="int">
+            SELECT class_id
+            FROM exam_class
+            WHERE exam_id = #{examId}
+        </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.buaa.javahuikao.service;
 
+import com.buaa.javahuikao.controller.InvigilationController;
 import com.buaa.javahuikao.dto.AnswerDTO;
 import com.buaa.javahuikao.dto.SingleAnswersContentDTO;
 import com.buaa.javahuikao.entity.StudentAnswers;
@@ -22,14 +23,16 @@ import java.util.Map;
 public class StudentAnswersContentService {
     private final StudentAnswersContentMapper studentAnswersContentMapper;
     private final StudentAnswersMapper studentAnswersMapper;
-
+    private final InvigilationController invigilationController;
     @Autowired
     public StudentAnswersContentService(
             StudentAnswersContentMapper studentAnswersContentMapper,
-            StudentAnswersMapper studentAnswersMapper
+            StudentAnswersMapper studentAnswersMapper,
+            InvigilationController invigilationController
             ) {
         this.studentAnswersContentMapper = studentAnswersContentMapper;
         this.studentAnswersMapper = studentAnswersMapper;
+        this.invigilationController = invigilationController;
     }
 
     public int submitAnswer(SingleAnswersContentDTO dto) {
@@ -54,14 +57,18 @@ public class StudentAnswersContentService {
         int studentId=dto.getStudentId();
         int questionId=dto.getQuestionId();
         AnswerDTO preAnswer= getAnswer(examId,studentId,questionId);
+        int newProgress;
         if (preAnswer.isVoidAnswer() && !newAnswer.isVoidAnswer()) {
             // 从没有答案变为有答案，进度加1
-            studentAnswersMapper.incrementProgress(studentId, examId);
+            newProgress = studentAnswersMapper.incrementProgress(studentId, examId);
+            invigilationController.singleProgressNotify(examId,studentId,newProgress);
+
         } else if (!preAnswer.isVoidAnswer() && newAnswer.isVoidAnswer()) {
             // 从有答案变为没有答案，进度减1
-            studentAnswersMapper.decrementProgress(studentId, examId);
-        }
+            newProgress = studentAnswersMapper.decrementProgress(studentId, examId);
+            invigilationController.singleProgressNotify(examId,studentId,newProgress);
 
+        }
     }
 
     public AnswerDTO getAnswer(int examId,int studentId, int questionId){

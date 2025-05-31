@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buaa.javahuikao.mapper.StudentMapper">
+    <select id="getStudentsByClassId" resultType="com.buaa.javahuikao.dto.StudentDTO">
+        SELECT
+        id AS studentId,
+        username AS studentName
+        FROM
+        users
+        WHERE
+        student_class_id = #{classId}
+    </select>
+</mapper>

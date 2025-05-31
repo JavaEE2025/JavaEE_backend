@@ -1,6 +1,7 @@
 package com.buaa.javahuikao.mapper;
 
 import com.buaa.javahuikao.dto.ExamDTO;
+import com.buaa.javahuikao.dto.StatusInfoDTO;
 import com.buaa.javahuikao.entity.Exam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -49,4 +50,10 @@ public interface ExamMapper {
     List<Exam> getOngoingExams(int userId);
     // 3. 已结束
     List<Exam> getCompletedExams(int userId);
+
+    //获取参考班级
+    List<Integer> getClassIdsByExamId(@Param("examId") Integer examId);
+
+    //获取所有参考学生状态
+    List<StatusInfoDTO> getAllStudentStatusByExamId(@Param("examId") int examId);
 }
