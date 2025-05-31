@@ -9,8 +9,50 @@
     <select id="findUser"  resultType="com.buaa.javahuikao.entity.User">
         select * from users where id = #{id}
     </select>
+
     <insert id="register" parameterType="com.buaa.javahuikao.entity.User">
         insert into users(id, password, type,username,email)
         values (#{id}, #{password}, #{type},#{name},#{email})
     </insert>
+
+    <select id="getUserInfo" resultMap="userInfoResultMap">
+        SELECT
+            u.id,
+            u.username,
+            u.email,
+            u.type,
+            u.student_class_id,
+            c.id AS class_id,
+            c.name AS class_name,
+            t.username AS teacher_name
+        FROM
+            users u
+                LEFT JOIN
+            classes c ON u.type = 'student' AND u.student_class_id = c.id
+                LEFT JOIN
+            users t ON u.type = 'student' AND c.teacher_id = t.id
+        WHERE
+            u.id = #{userId}
+    </select>
+
+    <select id="getTeacherClasses" resultType="com.buaa.javahuikao.dto.UserInfoDTO$OwnClass">
+        SELECT
+            id AS classId,
+            name AS className
+        FROM
+            classes
+        WHERE
+            teacher_id = #{teacherId}
+    </select>
+
+    <resultMap id="userInfoResultMap" type="com.buaa.javahuikao.dto.UserInfoDTO">
+        <result property="username" column="username"/>
+        <result property="email" column="email"/>
+        <result property="type" column="type"/>
+        <association property="joinClass" javaType="com.buaa.javahuikao.dto.UserInfoDTO$JoinClass">
+            <result property="classId" column="class_id"/>
+            <result property="className" column="class_name"/>
+            <result property="teacherName" column="teacher_name"/>
+        </association>
+    </resultMap>
 </mapper>

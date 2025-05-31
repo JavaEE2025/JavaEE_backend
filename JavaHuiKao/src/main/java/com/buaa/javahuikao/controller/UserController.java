@@ -1,15 +1,17 @@
 package com.buaa.javahuikao.controller;
 
 
+import com.buaa.javahuikao.dto.UserInfoDTO;
+import com.buaa.javahuikao.entity.Class;
 import com.buaa.javahuikao.entity.User;
+import com.buaa.javahuikao.mapper.ClassesMapper;
 import com.buaa.javahuikao.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.RequestEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +26,7 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+
 
     @CrossOrigin
     @PostMapping({"/login"})
@@ -71,4 +74,13 @@ public class UserController {
         }
         return map;
     }
+
+    @CrossOrigin
+    @GetMapping({"/user/info"})
+    public UserInfoDTO getUserInfo(@RequestBody Map<String,Object> registerMap){
+        int userId = Integer.parseInt((String) registerMap.get("user_id"));
+        return userService.getUserInfo(userId);
+    }
+
+
 }

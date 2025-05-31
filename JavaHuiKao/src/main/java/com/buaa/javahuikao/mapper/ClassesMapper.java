@@ -19,4 +19,12 @@ public interface ClassesMapper {
 
     // 教师获取班级
     List<Class> getTeacherClasses(int userId);
+
+    //获取所有班级
+    List<Class> getAllClass();
+
+    //学生加入班级
+    void joinClass(int studentId, int classId);
+
+    Integer newClass(Class newClass);
 }

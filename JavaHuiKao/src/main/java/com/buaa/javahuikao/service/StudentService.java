@@ -30,4 +30,5 @@ public class StudentService {
     public List<StudentDTO> getStudentsByClassId(int classId) {
         return studentMapper.getStudentsByClassId(classId);
     }
+
 }

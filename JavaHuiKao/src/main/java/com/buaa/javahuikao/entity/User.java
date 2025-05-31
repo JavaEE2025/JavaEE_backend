@@ -16,6 +16,9 @@ public class User {
     private Type type;
     private int student_class_id;
 
+    public User() {
+    }
+
     public enum Type {
         teacher("teacher"),
         student("student");

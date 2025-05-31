@@ -33,7 +33,7 @@ public class TeacherExamController {
     @Autowired
     private QuestionService questionService;
 
-    @PostMapping("/teacher/classes")
+    @PostMapping({"/teacher/classes","/teacher/all/classes"})
     public Object getTeacherClasses(@RequestBody Map<String, Integer> requestBody) {
         return classService.getTeacherClasses(requestBody.get("userId"));
     }
