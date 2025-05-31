@@ -13,20 +13,35 @@ package com.buaa.javahuikao.entity;
  * @Description: 某学生对某道题的答题记录
  */
 public class StudentAnswersContent {
-    private int studentAnswersId;
+    private int examId;
+    private int studentId;
     private int questionId;
     private String textAnswer;
     private byte[] imgAnswer;
     private String optionAnswer;
     private Double score;
-    private int exam_id;
-    private int student_id;
+
 
     public StudentAnswersContent() {}
 
     // Getters and Setters
-    public int getStudentAnswersId() { return studentAnswersId; }
-    public void setStudentAnswersId(int studentAnswersId) { this.studentAnswersId = studentAnswersId; }
+
+    public int getExamId() {
+        return examId;
+    }
+
+    public void setExamId(int examId) {
+        this.examId = examId;
+    }
+
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
+    }
+
     public int getQuestionId() { return questionId; }
     public void setQuestionId(int questionId) { this.questionId = questionId; }
     public String getTextAnswer() { return textAnswer; }

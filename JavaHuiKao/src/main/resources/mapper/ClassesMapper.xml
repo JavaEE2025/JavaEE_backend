@@ -3,11 +3,36 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.buaa.javahuikao.mapper.ClassesMapper">
+    <insert id="newClass" parameterType="com.buaa.javahuikao.entity.Class"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO classes (name, teacher_id)
+        VALUES (#{name}, #{teacherId})
+    </insert>
+    <update id="joinClass">
+        UPDATE users
+        SET student_class_id = #{classId}
+        WHERE id = #{studentId}
+    </update>
     <select id="getClassListByExamId"  resultType="java.lang.String">
         select c.name from exam_class as ec ,classes as c where ec.class_id=c.id and exam_id = #{exam_id}
     </select>
 
     <select id="getTeacherClasses" resultType="com.buaa.javahuikao.entity.Class">
-        select * from classes where teacher_id = #{userId}
+        SELECT
+            c.*,
+            COUNT(u.id) AS studentCount
+        FROM
+            classes c
+                LEFT JOIN
+            users u ON c.id = u.student_class_id AND u.type = 'student'
+        WHERE
+            c.teacher_id = #{userId}
+        GROUP BY
+            c.id
     </select>
+    <select id="getAllClass" resultType="com.buaa.javahuikao.entity.Class">
+        select * from classes
+    </select>
+
+
 </mapper>

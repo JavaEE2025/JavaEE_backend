@@ -1,6 +1,13 @@
 package com.buaa.javahuikao.service;
 
 
+import com.buaa.javahuikao.controller.InvigilationController;
+import com.buaa.javahuikao.dto.BehaviorDTO;
+import com.buaa.javahuikao.dto.QuestionAnswerDTO;
+import com.buaa.javahuikao.dto.SingleAnswersContentDTO;
+import com.buaa.javahuikao.dto.StudentExamAnswersDTO;
+import com.buaa.javahuikao.entity.StudentAnswers;
+import com.buaa.javahuikao.entity.StudentAnswersContent;
 import com.buaa.javahuikao.mapper.StudentAnswersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +23,51 @@ import org.springframework.stereotype.Service;
 public class StudentAnswersService {
     @Autowired
     private StudentAnswersMapper studentAnswersMapper;
+    @Autowired
+    private StudentAnswersContentService studentAnswersContentService;
+    @Autowired
+    private InvigilationController invigilationController;
+
 
     public int getRealPersonCnt(int examId) {
         return studentAnswersMapper.getRealPersonCnt(examId);
     }
 
-    public int getStudentAnswersId(int studentId,int examId) {
-        System.out.println("studentId" + studentId);
-        System.out.println("examId" + examId);
-        int ret = studentAnswersMapper.getStudentAnswersId(studentId, examId);
-        System.out.println("ret" + ret);
-        return studentAnswersMapper.getStudentAnswersId(studentId, examId);
-    }
-
     public int getPrePersonCnt(int examId) {
         return studentAnswersMapper.getPrePersonCnt(examId);
     }
+
+    public void submitExamAnswers(StudentExamAnswersDTO dto){
+        //修改studentAnswers表
+        int exam_id = dto.getExam_id();
+        int student_id = dto.getStudent_id();
+        studentAnswersMapper.submitExam(exam_id,student_id);
+
+        //修改答案内容
+        for(QuestionAnswerDTO QADTO : dto.getAnswer_list()){
+            SingleAnswersContentDTO SACDTO = new SingleAnswersContentDTO();
+            SACDTO.setExamId(dto.getExam_id());
+            SACDTO.setStudentId(dto.getStudent_id());
+            SACDTO.setQuestionId(QADTO.getQuestion_id());
+            SACDTO.setAnswer(QADTO.getAnswer());
+            studentAnswersContentService.submitAnswer(SACDTO);
+        }
+    }
+
+    public void updateStatus(BehaviorDTO behaviorDTO){
+        int exam_id = behaviorDTO.getExam_id();
+        int student_id = behaviorDTO.getStudent_id();
+        String status = behaviorDTO.getBehavior_type();
+        //更新数据库
+        if("normal".equals(status)){
+            studentAnswersMapper.beginExam(exam_id,student_id);
+        }
+        else if("abnormal".equals(status)){
+            String behavior = behaviorDTO.getDescription();
+            studentAnswersMapper.addAbnormalBehavior(exam_id,student_id,behavior);
+        }
+        //通知教师端
+        invigilationController.singleStatusNotify(exam_id,student_id,status, behaviorDTO.getDescription());
+    }
+
 }

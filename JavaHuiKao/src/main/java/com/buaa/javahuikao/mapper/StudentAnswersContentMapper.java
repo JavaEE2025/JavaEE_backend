@@ -1,5 +1,6 @@
 package com.buaa.javahuikao.mapper;
 
+import com.buaa.javahuikao.dto.AnswerDTO;
 import com.buaa.javahuikao.entity.StudentAnswersContent;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +14,5 @@ public interface StudentAnswersContentMapper {
     //提交答案，返回1则成功插入，返回2则成功更新
     int submitAnswer(StudentAnswersContent content);
     //查找提交的答案
-    StudentAnswersContent getContentById(int studentAnswersId, int questionId);
-
+    AnswerDTO getAnswersContent(int examId, int studentId, int questionId);
 }

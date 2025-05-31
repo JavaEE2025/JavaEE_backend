@@ -12,6 +12,18 @@
         <if test="imgAnswer == null">img_answer = NULL,</if>
         <if test="optionAnswer != null">option_answer = #{optionAnswer}</if>
         <if test="optionAnswer == null">option_answer = NULL</if>
-        WHERE student_answers_id = #{studentAnswersId} AND question_id = #{questionId}
+        WHERE exam_id = #{examId} AND question_id = #{questionId} AND student_id = #{studentId}
     </update>
+
+    <select id="getAnswersContent" resultType="com.buaa.javahuikao.dto.AnswerDTO" resultOrdered="true">
+        SELECT
+            text_answer as "textAnswer",
+            img_answer as "imgAnswer",
+            option_answer as "stringOptionAnswer",
+            1 as "recordExists"
+        FROM student_answers_content
+        WHERE exam_id = #{examId}
+          AND student_id = #{studentId}
+          AND question_id = #{questionId}
+    </select>
 </mapper>

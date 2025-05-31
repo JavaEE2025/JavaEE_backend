@@ -11,8 +11,43 @@
         select COUNT(*) from student_answers where exam_id=#{examId}
     </select>
 
-    <select id="getStudentAnswersId" resultType="java.lang.Integer">
-        SELECT id FROM student_answers
-        WHERE student_id = #{studentId} AND exam_id = #{examId}
-    </select>
+    <!--  学生进入考试  -->
+    <update id="beginExam">
+        UPDATE student_answers
+        SET progress = 0, status = '正常'
+        WHERE exam_id = #{examId} AND student_id = #{studentId}
+    </update>
+
+    <!-- 增加进度 -->
+    <update id="incrementProgress">
+        UPDATE student_answers
+        SET progress = @new_progress := progress + 1
+        WHERE exam_id = #{examId} AND student_id = #{studentId};
+
+        SELECT @new_progress AS progress;
+    </update>
+
+    <!-- 减少进度 -->
+    <update id="decrementProgress" parameterType="map">
+        UPDATE student_answers
+        SET progress = @new_progress := progress - 1
+        WHERE exam_id = #{examId} AND student_id = #{studentId};
+
+        SELECT @new_progress AS progress;
+    </update>
+
+    <!-- 提交试卷   -->
+    <update id="submitExam">
+        UPDATE student_answers
+        SET is_final = true
+        WHERE exam_id = #{examId} AND student_id = #{studentId}
+    </update>
+
+    <!-- 出现异常行为  -->
+    <update id="addAbnormalBehavior">
+        UPDATE student_answers
+        SET abnormal_behaviors = CONCAT(COALESCE(abnormal_behaviors, ''), ';', #{behavior}),
+            status = '异常'
+        WHERE exam_id = #{examId} AND student_id = #{studentId}
+    </update>
 </mapper>

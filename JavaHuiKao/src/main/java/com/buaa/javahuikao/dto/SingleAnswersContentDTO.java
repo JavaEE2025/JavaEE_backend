@@ -6,6 +6,8 @@ package com.buaa.javahuikao.dto;
  * @Description:
  */
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @ClassName: StudentAnswersContentDTO
  * @Author: sxq
@@ -13,8 +15,11 @@ package com.buaa.javahuikao.dto;
  * @Description: 前端请求映射类
  */
 public class SingleAnswersContentDTO {
+    @JsonProperty("question_id")
     private int questionId;
+    @JsonProperty("student_id")
     private int studentId;
+    @JsonProperty("exam_id")
     private int examId;
     private AnswerDTO answer;
 
