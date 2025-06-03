@@ -23,11 +23,14 @@ public class StudentAnswersController {
     private StudentAnswersService studentAnswersService;
     @Autowired
     private StudentAnswersContentService studentAnswersContentService;
+    @Autowired
+    private MarkController markController;
 
     @PostMapping("/submit/exam")
     public ResponseEntity<?> submitExam(@RequestBody StudentExamAnswersDTO dto){
         try{
             studentAnswersService.submitExamAnswers(dto);
+            markController.autoMarkObjective(dto.getExam_id());
             return ResponseEntity.ok().build();
         }
         catch(Exception e){
