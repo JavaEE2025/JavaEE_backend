@@ -42,12 +42,18 @@
 
     <select id="findAllQuestions" resultMap="QuestionWithKp">
         SELECT * FROM questions
+        <if test="type != null and type != ''">
+            WHERE type = #{type}
+        </if>
     </select>
 
     <select id="searchByKeyword" resultMap="QuestionWithKp">
         SELECT *
         FROM questions
         WHERE MATCH(topic, method, source) AGAINST(#{keyword} IN BOOLEAN MODE)
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
     </select>
 
     <resultMap id="objectiveMap" type="com.buaa.javahuikao.dto.ObjectiveQuestionDTO">

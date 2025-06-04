@@ -20,9 +20,9 @@ public interface QuestionService {
     // 创建问题
     NewQuestionDTO createQuestion(NewQuestionDTO q);
     // 获取所有问题
-    PageInfo<QuestionDTO> getAllQuestions(int page, int size);
+    PageInfo<QuestionDTO> getAllQuestions(int page, int size, String type);
     // 根据关键词搜索问题
-    PageInfo<QuestionDTO> searchQuestions(String keyword, int page, int size);
+    PageInfo<QuestionDTO> searchQuestions(String keyword, int page, int size, String type);
     // 根据题目ID获取题目信息
     List<ExamQuestionDTO> getQuestionsByIds(List<Integer> ids);
 

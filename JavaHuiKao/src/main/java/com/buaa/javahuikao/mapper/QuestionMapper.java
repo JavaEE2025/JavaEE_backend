@@ -26,9 +26,10 @@ public interface QuestionMapper {
     void insertOptions(@Param("questionId") Integer questionId,
                           @Param("options") List<Map<String, Object>> options);
 
-    List<QuestionDTO> findAllQuestions();
+    List<QuestionDTO> findAllQuestions(String type);
 
-    List<QuestionDTO> searchByKeyword(@Param("keyword") String keyword);
+    List<QuestionDTO> searchByKeyword(@Param("keyword") String keyword,
+                                      @Param("type") String type);
 
     //获取客观题信息
     List<ObjectiveQuestionDTO> getObjectiveQuestions(int examId);

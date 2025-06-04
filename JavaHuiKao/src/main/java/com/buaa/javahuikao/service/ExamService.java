@@ -26,6 +26,6 @@ public interface ExamService {
      */
     List<Exam> getStudentExams(int userId, String status);
     ExamDTO createExam(ExamDTO examDTO);
-
-
+    void editExam(ExamDTO examDTO);
+    void deleteExam(int examId);
 }

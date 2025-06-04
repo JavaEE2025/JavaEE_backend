@@ -147,4 +147,21 @@
             FROM exam_class
             WHERE exam_id = #{examId}
         </select>
+
+    <select id="getQuestionIdsByExamId" resultType="int">
+        SELECT question_id
+        FROM exam_question
+        WHERE exam_id = #{examId}
+    </select>
+
+    <insert id="editExam" parameterType="com.buaa.javahuikao.entity.Exam">
+        INSERT INTO exams
+            (id, name, start_time, duration, marked, sum_score)
+        VALUES
+            (#{id}, #{name}, #{startTime}, #{duration}, #{marked}, #{sumScore})
+    </insert>
+
+    <delete id="deleteExam" parameterType="int">
+        DELETE FROM exams WHERE id = #{examId}
+    </delete>
 </mapper>

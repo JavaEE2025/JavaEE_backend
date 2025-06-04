@@ -54,18 +54,18 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PageInfo<QuestionDTO> getAllQuestions(int page, int size) {
+    public PageInfo<QuestionDTO> getAllQuestions(int page, int size, String type) {
         PageHelper.startPage(page, size);
-        List<QuestionDTO> list = questionMapper.findAllQuestions();
+        List<QuestionDTO> list = questionMapper.findAllQuestions(type);
         // 二次填充 kps 列表
         list.forEach(q -> q.setKps(kpMapper.findByQuestionId(q.getId())));
         return new PageInfo<>(list);
     }
 
     @Override
-    public PageInfo<QuestionDTO> searchQuestions(String keyword, int page, int size) {
+    public PageInfo<QuestionDTO> searchQuestions(String keyword, int page, int size, String type) {
         PageHelper.startPage(page, size);
-        List<QuestionDTO> list = questionMapper.searchByKeyword(keyword);
+        List<QuestionDTO> list = questionMapper.searchByKeyword(keyword, type);
         list.forEach(q -> q.setKps(kpMapper.findByQuestionId(q.getId())));
         return new PageInfo<>(list);
     }

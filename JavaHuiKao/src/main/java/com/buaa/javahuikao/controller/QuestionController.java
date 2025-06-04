@@ -34,11 +34,12 @@ public class QuestionController {
         int page = Integer.parseInt(requestBody.get("page").toString());
         int size = Integer.parseInt(requestBody.get("size").toString());
         String keyword = requestBody.get("search") != null ? requestBody.get("search").toString() : null;
+        String type = requestBody.get("type") != null ? requestBody.get("type").toString() : null;
 
         if (keyword != null && !keyword.isEmpty()) {
-            return questionService.searchQuestions("+" + keyword, page, size);
+            return questionService.searchQuestions("+" + keyword, page, size, type);
         } else {
-            return questionService.getAllQuestions(page, size);
+            return questionService.getAllQuestions(page, size, type);
         }
     }
 

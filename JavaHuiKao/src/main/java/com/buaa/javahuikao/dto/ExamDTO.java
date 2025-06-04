@@ -11,11 +11,17 @@ import java.util.Map;
  * @description:
  */
 public class ExamDTO extends Exam {
+    private int classId;
     private String className;
 
     private List<Integer> classIds;
 
     private List<Map<String, Number>> questions;
+
+    private List<Integer> questionIds;
+
+    public int getClassId() { return classId; }
+    public void setClassId(int classId) { this.classId = classId; }
 
     public String getClassName() {
         return className;
@@ -39,5 +45,13 @@ public class ExamDTO extends Exam {
 
     public void setQuestions(List<Map<String, Number>> questions) {
         this.questions = questions;
+    }
+
+    public List<Integer> getQuestionIds() {
+        return questionIds;
+    }
+
+    public void setQuestionIds(List<Integer> questionIds) {
+        this.questionIds = questionIds;
     }
 }
