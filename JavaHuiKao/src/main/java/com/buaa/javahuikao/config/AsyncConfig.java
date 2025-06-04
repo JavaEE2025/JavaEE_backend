@@ -24,40 +24,31 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class AsyncConfig {
 
     /**
-     * 答题处理专用线程池
-     * 适用于CPU密集型任务（核心线程数=CPU核心数）
+     * 单题提交线程池
      */
-    @Bean(name = "answerProcessingExecutor")
-    public Executor answerProcessingExecutor() {
+    @Bean(name = "answerSubmitExecutor")
+    public Executor answerSubmitExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-
-        // 核心配置
-        executor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
-        executor.setMaxPoolSize(50);
-        executor.setQueueCapacity(1000);
-        executor.setThreadNamePrefix("AnswerProcessor-");
-
-        // 拒绝策略（由调用者线程直接运行被拒绝的任务）
+        executor.setCorePoolSize(50);  // 较大核心线程数应对IO等待
+        executor.setMaxPoolSize(100);
+        executor.setQueueCapacity(1000); // 缓冲突发流量
+        executor.setThreadNamePrefix("AnswerSubmit-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-
-        // 线程保活时间（秒）
-        executor.setKeepAliveSeconds(60);
-
-        // 等待所有任务完成后关闭
-        executor.setWaitForTasksToCompleteOnShutdown(true);
-
-        executor.initialize();
         return executor;
     }
 
+
     /**
-     * 可选：IO密集型任务线程池
+     * 状态更新线程池
      */
-    @Bean(name = "ioIntensiveExecutor")
-    public Executor ioIntensiveExecutor() {
+    @Bean(name = "statusUpdateExecutor")
+    public Executor statusUpdateExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(20);  // 更大的核心线程数
-        // 其他配置...
+        executor.setCorePoolSize(20);
+        executor.setMaxPoolSize(100);
+        executor.setQueueCapacity(500); // 适度队列缓冲
+        executor.setThreadNamePrefix("IO-Executor-");
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return executor;
     }
 }

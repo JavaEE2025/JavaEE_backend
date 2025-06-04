@@ -8,6 +8,7 @@ import com.buaa.javahuikao.entity.StudentAnswersContent;
 import com.buaa.javahuikao.mapper.StudentAnswersContentMapper;
 import com.buaa.javahuikao.mapper.StudentAnswersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -35,6 +36,7 @@ public class StudentAnswersContentService {
         this.invigilationController = invigilationController;
     }
 
+    @Async("answerSubmitExecutor")
     public int submitAnswer(SingleAnswersContentDTO dto) {
         StudentAnswersContent contentEntity=new StudentAnswersContent();
         contentEntity.setStudentId(dto.getStudentId());
@@ -51,6 +53,7 @@ public class StudentAnswersContentService {
         return studentAnswersContentMapper.submitAnswer(contentEntity);
     }
 
+    @Async("answerSubmitExecutor")
     public void updateProgress(SingleAnswersContentDTO dto,AnswerDTO newAnswer) {
         //查找总题目数-->有到无or无到有则修改
         int examId=dto.getExamId();

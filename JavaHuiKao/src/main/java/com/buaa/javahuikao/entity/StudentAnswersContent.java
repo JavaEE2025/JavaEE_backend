@@ -54,18 +54,18 @@ public class StudentAnswersContent {
     public void setScore(Double score) { this.score = score; }
 
     public int getExam_id() {
-        return exam_id;
+        return examId;
     }
 
     public int getStudent_id() {
-        return student_id;
+        return studentId;
     }
 
     public void setExam_id(int exam_id) {
-        this.exam_id = exam_id;
+        this.examId = exam_id;
     }
 
     public void setStudent_id(int student_id) {
-        this.student_id = student_id;
+        this.studentId = student_id;
     }
 }

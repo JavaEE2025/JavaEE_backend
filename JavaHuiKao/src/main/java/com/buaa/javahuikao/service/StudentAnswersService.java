@@ -10,6 +10,7 @@ import com.buaa.javahuikao.entity.StudentAnswers;
 import com.buaa.javahuikao.entity.StudentAnswersContent;
 import com.buaa.javahuikao.mapper.StudentAnswersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,6 +38,7 @@ public class StudentAnswersService {
         return studentAnswersMapper.getPrePersonCnt(examId);
     }
 
+
     public void submitExamAnswers(StudentExamAnswersDTO dto){
         //修改studentAnswers表
         int exam_id = dto.getExam_id();
@@ -54,6 +56,7 @@ public class StudentAnswersService {
         }
     }
 
+    @Async("statusUpdateExecutor")
     public void updateStatus(BehaviorDTO behaviorDTO){
         int exam_id = behaviorDTO.getExam_id();
         int student_id = behaviorDTO.getStudent_id();
