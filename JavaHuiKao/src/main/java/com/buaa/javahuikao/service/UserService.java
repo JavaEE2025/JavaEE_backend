@@ -33,6 +33,8 @@ public class UserService {
     public UserInfoDTO getUserInfo(int userId) {
         UserInfoDTO userInfo = userMapper.getUserInfo(userId);
 
+        System.out.println("获取的用户信息："+ userInfo);
+
         if ("teacher".equals(userInfo.getType())) {
             // 查询老师管理的所有班级
             userInfo.setOwnClasses(userMapper.getTeacherClasses(userId));

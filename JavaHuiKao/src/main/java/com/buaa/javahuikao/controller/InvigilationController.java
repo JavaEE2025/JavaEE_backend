@@ -52,7 +52,7 @@ public class InvigilationController {
     private ExamStatusService examStatusService;
 
     //获取所有考试状态
-    @GetMapping("/invigilation/exam/status")
+    @PostMapping("/invigilation/exam/status")
     public ResponseEntity<?> getAllStatus(@RequestBody Map<String, Integer> requestBody) {
         try{
             int examId = requestBody.get("exam_id");
@@ -64,7 +64,7 @@ public class InvigilationController {
     }
 
     //获取参考学生列表
-    @GetMapping("/invigilation/student_list")
+    @PostMapping("/invigilation/student_list")
     public List<StudentDTO> getStudentList(@RequestBody Map<String, Integer> requestBody) {
         int examId = requestBody.get("exam_id");
         return examStatusService.getStudentList(examId);

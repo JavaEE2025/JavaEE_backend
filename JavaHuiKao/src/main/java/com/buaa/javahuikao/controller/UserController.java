@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @CrossOrigin
-    @GetMapping({"/user/info"})
+    @PostMapping({"/user/info"})
     public UserInfoDTO getUserInfo(@RequestBody Map<String,Object> registerMap){
         int userId = Integer.parseInt((String) registerMap.get("user_id"));
         return userService.getUserInfo(userId);

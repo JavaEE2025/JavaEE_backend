@@ -21,10 +21,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("*")
+        registry.addMapping("/**")  // 改为对所有路径生效
+                .allowedOrigins("http://localhost:8080")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("Content-Type", "Authorization")
+                .allowedHeaders("*")  // 允许所有头部
                 .allowCredentials(true)
                 .maxAge(3600);
     }

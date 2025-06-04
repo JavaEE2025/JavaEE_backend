@@ -31,7 +31,7 @@ public class StudentController {
     }
 
     //获取班级所有学生
-    @GetMapping("/student/in/class")
+    @PostMapping("/student/in/class")
     public List<StudentDTO> getClassStudents(@RequestBody Map<String, Integer> requestBody) {
             int classId = requestBody.get("class_id");
             return studentService.getStudentsByClassId(classId);

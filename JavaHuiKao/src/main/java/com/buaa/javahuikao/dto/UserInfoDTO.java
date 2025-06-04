@@ -35,4 +35,15 @@ public class UserInfoDTO {
         private String classId;
         private String className;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfoDTO{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", type='" + type + '\'' +
+                ", joinClass=" + joinClass +
+                ", ownClasses=" + ownClasses +
+                '}';
+    }
 }
