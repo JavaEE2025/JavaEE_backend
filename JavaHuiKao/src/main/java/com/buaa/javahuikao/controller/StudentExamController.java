@@ -20,6 +20,6 @@ public class StudentExamController {
 
     @PostMapping("/exams")
     public Object getStudentExams(@RequestBody Map<String, Object> requestBody) {
-        return examService.getStudentExams((Integer)requestBody.get("userId"), (String)requestBody.get("status"));
+        return examService.getStudentExams(Integer.parseInt((String)requestBody.get("userId")), (String)requestBody.get("status"));
     }
 }

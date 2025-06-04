@@ -36,9 +36,4 @@ public class RedisConfig {
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
-
-    @Bean
-    public ObjectMapper objectMapper(){
-        return new ObjectMapper();
-    }
 }
