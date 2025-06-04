@@ -33,15 +33,15 @@ public class ClassContorller {
 
     @PostMapping("/join/class")
     public void joinClass(@RequestBody Map<String,Object> requestBody){
-        int studentId = (Integer)requestBody.get("student_id");
-        int classId = (Integer)requestBody.get("class_id");
+        int studentId = Integer.parseInt((String)requestBody.get("student_id"));
+        int classId = Integer.parseInt((String)requestBody.get("class_id"));
         classesMapper.joinClass(studentId,classId);
     }
 
     //新建班级
     @PostMapping("/new/class")
     public Integer newClass(@RequestBody Map<String, Object> requestBody) {
-        int teacherId = (int) requestBody.get("teacher_id");
+        int teacherId = Integer.parseInt((String) requestBody.get("teacher_id"));
         String className = (String)requestBody.get("class_name");
         Class newClass = new Class();
         newClass.setName(className);
