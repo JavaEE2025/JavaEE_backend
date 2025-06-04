@@ -9,6 +9,6 @@
         FROM
         users
         WHERE
-        student_class_id = #{classId}
+        student_class_id = #{classId} AND type = 'student'
     </select>
 </mapper>

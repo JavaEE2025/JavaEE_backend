@@ -34,7 +34,7 @@ public class ClassContorller {
     @PostMapping("/join/class")
     public void joinClass(@RequestBody Map<String,Object> requestBody){
         int studentId = Integer.parseInt((String)requestBody.get("student_id"));
-        int classId = Integer.parseInt((String)requestBody.get("class_id"));
+        int classId = (int)requestBody.get("class_id");
         classesMapper.joinClass(studentId,classId);
     }
 
