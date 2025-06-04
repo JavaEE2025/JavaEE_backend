@@ -1,9 +1,6 @@
 package com.buaa.javahuikao.service.impl;
 
-import com.buaa.javahuikao.dto.ExamQuestionDTO;
-import com.buaa.javahuikao.dto.ObjectiveQuestionDTO;
-import com.buaa.javahuikao.dto.QuestionDTO;
-import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
+import com.buaa.javahuikao.dto.*;
 import com.buaa.javahuikao.entity.Kp;
 import com.buaa.javahuikao.entity.Option;
 import com.buaa.javahuikao.entity.Question;
@@ -42,16 +39,16 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDTO createQuestion(QuestionDTO q) {
+    public NewQuestionDTO createQuestion(NewQuestionDTO q) {
         // 1. 插入 questions 表，生成主键 q.id
         questionMapper.insertQuestion(q);
         // 2. 如果有 kp 关联，批量插入 question_kp
         if (q.getKps() != null && !q.getKps().isEmpty()) {
-            List<Integer> kpIds = q.getKps()
-                    .stream()
-                    .map(Kp::getId)
-                    .toList();
-            questionMapper.insertQuestionKps(q.getId(), kpIds);
+            questionMapper.insertQuestionKps(q.getId(), q.getKps());
+        }
+        // 3. 如果有选项，批量插入 options
+        if (q.getOptions() != null && !q.getOptions().isEmpty()) {
+            questionMapper.insertOptions(q.getId(), q.getOptions());
         }
         return q;
     }
@@ -75,6 +72,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<ExamQuestionDTO> getQuestionsByIds(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<ExamQuestionDTO> result = new ArrayList<>();
         questionMapper.getQuestionsByIds(ids).forEach(
             q -> {
@@ -94,7 +94,6 @@ public class QuestionServiceImpl implements QuestionService {
             }
         );
         return result;
-
     }
 
     @Override

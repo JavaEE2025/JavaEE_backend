@@ -18,6 +18,15 @@
         </foreach>
     </insert>
 
+    <insert id="insertOptions">
+        INSERT INTO options
+            (question_id, `option`, is_correct)
+        VALUES
+            <foreach collection="options" item="option" separator=",">
+                (#{questionId}, #{option.content}, #{option.isCorrect})
+            </foreach>
+    </insert>
+
     <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.dto.QuestionDTO">
         <id property="id" column="id"/>
         <result property="topic"       column="topic"/>

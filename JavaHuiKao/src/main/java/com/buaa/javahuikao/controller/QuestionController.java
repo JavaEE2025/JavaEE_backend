@@ -1,5 +1,6 @@
 package com.buaa.javahuikao.controller;
 
+import com.buaa.javahuikao.dto.NewQuestionDTO;
 import com.buaa.javahuikao.dto.QuestionDTO;
 import com.buaa.javahuikao.entity.Question;
 import com.buaa.javahuikao.service.QuestionService;
@@ -42,8 +43,8 @@ public class QuestionController {
     }
 
     @PostMapping("/createQuestion")
-    public Map<String, Object> createQuestion(@RequestBody QuestionDTO question) {
-        Question createdQuestion = questionService.createQuestion(question);
+    public Map<String, Object> createQuestion(@RequestBody NewQuestionDTO newQuestion) {
+        Question createdQuestion = questionService.createQuestion(newQuestion);
         return Map.of("result", "问题创建成功",
                       "questionId", createdQuestion.getId());
     }

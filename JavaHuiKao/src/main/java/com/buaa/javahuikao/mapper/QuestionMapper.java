@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: bush
@@ -22,6 +23,8 @@ public interface QuestionMapper {
     void insertQuestion(Question q);
     void insertQuestionKps(@Param("questionId") Integer questionId,
                           @Param("kpIds") List<Integer> kpIds);
+    void insertOptions(@Param("questionId") Integer questionId,
+                          @Param("options") List<Map<String, Object>> options);
 
     List<QuestionDTO> findAllQuestions();
 
