@@ -86,6 +86,9 @@ public class MarkController {
                 subjectiveQuestionDTO.setProcess(processPerson/exam_real_person);
             }
             map.put("subjective", subjectiveQuestionDTOS);
+            //查询是否还有没判的题
+            Boolean stillHave=markService.checkStillHave(exam_id);
+            map.put("stillHave",stillHave);
         }catch (Exception e){
             log.error("markOverall: ", e);
         }
