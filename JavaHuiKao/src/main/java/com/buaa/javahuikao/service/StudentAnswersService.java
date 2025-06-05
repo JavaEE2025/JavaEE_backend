@@ -62,10 +62,10 @@ public class StudentAnswersService {
         int student_id = behaviorDTO.getStudent_id();
         String status = behaviorDTO.getBehavior_type();
         //更新数据库
-        if("normal".equals(status)){
+        if("正常".equals(status)){
             studentAnswersMapper.beginExam(exam_id,student_id);
         }
-        else if("abnormal".equals(status)){
+        else if("异常".equals(status)){
             String behavior = behaviorDTO.getDescription();
             studentAnswersMapper.addAbnormalBehavior(exam_id,student_id,behavior);
         }

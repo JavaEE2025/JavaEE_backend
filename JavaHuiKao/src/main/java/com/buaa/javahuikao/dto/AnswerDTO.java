@@ -1,9 +1,14 @@
 package com.buaa.javahuikao.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -16,12 +21,20 @@ public class AnswerDTO{
     @JsonProperty("text_answer")
     private String textAnswer;
     @JsonProperty("img_answer")
-    private byte[] imgAnswer;
-    @JsonProperty("option_answers")
-    private List<String> optionAnswers;
-    //string版本
-    private String stringOptionAnswer;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String imgBase64;
 
+    @JsonIgnore
+    private byte[] imgAnswer;
+
+
+
+    @JsonProperty("option_answers")
+    private List<String> optionAnswers = new ArrayList<>();;
+    //string版本
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String stringOptionAnswer;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer recordExists; // 用于标记记录存在
 
     public String getTextAnswer() {
@@ -38,6 +51,12 @@ public class AnswerDTO{
 
     public void setImgAnswer(byte[] imgAnswer) {
         this.imgAnswer = imgAnswer;
+    }
+
+    public void decodeBase64Image() {
+        if (this.imgBase64 != null && !this.imgBase64.isEmpty()) {
+            this.imgAnswer = Base64.getDecoder().decode(this.imgBase64.split(",")[1]);
+        }
     }
 
     public List<String> getOptionAnswers() {

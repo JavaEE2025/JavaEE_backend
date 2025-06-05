@@ -4,12 +4,12 @@ import com.buaa.javahuikao.dto.BehaviorDTO;
 import com.buaa.javahuikao.dto.StudentExamAnswersDTO;
 import com.buaa.javahuikao.service.StudentAnswersContentService;
 import com.buaa.javahuikao.service.StudentAnswersService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName: StudentAnswersController
@@ -26,9 +26,24 @@ public class StudentAnswersController {
     @Autowired
     private MarkController markController;
 
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public void messageNotReadable(HttpMessageNotReadableException exception, HttpServletResponse response){
+        //调试作用，用来调试前台传递json后台无法正确映射问题
+        System.out.println("请求参数不匹配。"+ exception);
+    }
+
     @PostMapping("/submit/exam")
     public ResponseEntity<?> submitExam(@RequestBody StudentExamAnswersDTO dto){
         try{
+            dto.getAnswer_list().forEach(answer -> {
+                if (answer.getAnswer() != null) {
+                    answer.getAnswer().decodeBase64Image();
+                }
+            });
+
             studentAnswersService.submitExamAnswers(dto);
             markController.autoMarkObjective(dto.getExam_id());
             return ResponseEntity.ok().build();

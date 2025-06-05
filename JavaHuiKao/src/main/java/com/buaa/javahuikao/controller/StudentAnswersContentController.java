@@ -38,10 +38,13 @@ public class StudentAnswersContentController {
 
     @CrossOrigin
     @PostMapping({"/submit/answer"})
-    public void submitSingleAnswer(@RequestBody SingleAnswersContentDTO singleAnswersContentDTO) {
-        System.out.println("singleAnswersContentDTO:"+singleAnswersContentDTO);
+    public void submitSingleAnswer(@RequestBody SingleAnswersContentDTO dto) {
+        System.out.println("singleAnswersContentDTO:"+dto);
         try{
-            studentAnswersContentService.submitAnswer(singleAnswersContentDTO);
+            if (dto.getAnswer() != null) {
+                dto.getAnswer().decodeBase64Image();
+            }
+            studentAnswersContentService.submitAnswer(dto);
         }
         catch(Exception e){
             e.printStackTrace();
