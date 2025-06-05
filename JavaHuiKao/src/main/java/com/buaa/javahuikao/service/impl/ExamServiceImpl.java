@@ -45,6 +45,7 @@ public class ExamServiceImpl implements ExamService {
         examDTO.setSumScore(examDTO.getQuestions().stream()
                 .mapToDouble(q -> q.get("score").doubleValue())
                 .sum());
+        examDTO.setQuestionCount(examDTO.getQuestions().size());
         // 1. 插入考试信息
         examMapper.insertExam(examDTO);
         // 2. 插入考试与班级的关联

@@ -5,9 +5,9 @@
 <mapper namespace="com.buaa.javahuikao.mapper.ExamMapper">
     <insert id="insertExam" useGeneratedKeys="true" keyProperty="id" parameterType="com.buaa.javahuikao.entity.Exam">
         INSERT INTO exams
-            (name, start_time, duration, marked, sum_score)
+            (name, start_time, duration, marked, sum_score, question_count)
         VALUES
-            (#{name}, #{startTime}, #{duration}, #{marked}, #{sumScore})
+            (#{name}, #{startTime}, #{duration}, #{marked}, #{sumScore}, #{questionCount})
     </insert>
 
     <insert id="insertExamClasses" parameterType="map">
