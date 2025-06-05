@@ -37,7 +37,7 @@ public class StudentAnswersContentService {
     }
 
     @Async("answerSubmitExecutor")
-    public int submitAnswer(SingleAnswersContentDTO dto) {
+    public void submitAnswer(SingleAnswersContentDTO dto) {
         StudentAnswersContent contentEntity=new StudentAnswersContent();
         contentEntity.setStudentId(dto.getStudentId());
         contentEntity.setExamId(dto.getExamId());
@@ -50,7 +50,7 @@ public class StudentAnswersContentService {
         contentEntity.setOptionAnswer(answer.getStringOptionAnswer());
         //修改progress
         updateProgress(dto,answer);
-        return studentAnswersContentMapper.submitAnswer(contentEntity);
+        studentAnswersContentMapper.submitAnswer(contentEntity);
     }
 
     @Async("answerSubmitExecutor")
@@ -63,12 +63,14 @@ public class StudentAnswersContentService {
         int newProgress;
         if (preAnswer.isVoidAnswer() && !newAnswer.isVoidAnswer()) {
             // 从没有答案变为有答案，进度加1
-            newProgress = studentAnswersMapper.incrementProgress(studentId, examId);
+            studentAnswersMapper.incrementProgress(studentId, examId);
+            newProgress = studentAnswersMapper.getProgress(studentId,examId);
             invigilationController.singleProgressNotify(examId,studentId,newProgress);
 
         } else if (!preAnswer.isVoidAnswer() && newAnswer.isVoidAnswer()) {
             // 从有答案变为没有答案，进度减1
-            newProgress = studentAnswersMapper.decrementProgress(studentId, examId);
+            studentAnswersMapper.decrementProgress(studentId, examId);
+            newProgress = studentAnswersMapper.getProgress(studentId,examId);
             invigilationController.singleProgressNotify(examId,studentId,newProgress);
 
         }

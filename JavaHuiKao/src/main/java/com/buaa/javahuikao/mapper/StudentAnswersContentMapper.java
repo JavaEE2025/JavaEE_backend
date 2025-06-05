@@ -11,8 +11,8 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface StudentAnswersContentMapper {
-    //提交答案，返回1则成功插入，返回2则成功更新
-    int submitAnswer(StudentAnswersContent content);
+    //提交答案
+    void submitAnswer(StudentAnswersContent content);
     //查找提交的答案
     AnswerDTO getAnswersContent(int examId, int studentId, int questionId);
 }

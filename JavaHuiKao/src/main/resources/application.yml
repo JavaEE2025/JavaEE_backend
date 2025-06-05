@@ -17,18 +17,18 @@ spring:
   # Redis配置
   data:
     redis:
-      host: redis-cluster.example.com
+      host: 127.0.0.1
       port: 6379
-      password: redis123
+#      password: redis123
       lettuce:
         pool:
           max-active: 50  # 匹配线程池大小
           max-idle: 20
           min-idle: 5
-      cluster:
-        nodes:
-          - redis-node1:6379
-          - redis-node2:6379
+#      cluster:
+#        nodes:
+#          - redis-node1:6379
+#          - redis-node2:6379
 #  sql:
 #    init:
 #      mode: always       # 每次启动都执行（在自己本地运行的时候设置，感觉用云数据库会冲突）

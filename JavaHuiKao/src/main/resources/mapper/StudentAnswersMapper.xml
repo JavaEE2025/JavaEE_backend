@@ -21,20 +21,23 @@
     <!-- 增加进度 -->
     <update id="incrementProgress">
         UPDATE student_answers
-        SET progress = @new_progress := progress + 1
-        WHERE exam_id = #{examId} AND student_id = #{studentId};
-
-        SELECT @new_progress AS progress;
+        SET progress = progress + 1
+        WHERE exam_id = #{examId} AND student_id = #{studentId}
     </update>
 
     <!-- 减少进度 -->
-    <update id="decrementProgress" parameterType="map">
+    <update id="decrementProgress">
         UPDATE student_answers
-        SET progress = @new_progress := progress - 1
-        WHERE exam_id = #{examId} AND student_id = #{studentId};
-
-        SELECT @new_progress AS progress;
+        SET progress = progress - 1
+        WHERE exam_id = #{examId} AND student_id = #{studentId}
     </update>
+
+<!--  获取进度  -->
+    <select id="getProgress" resultType="java.lang.Integer">
+        SELECT student_answers.progress
+        FROM student_answers
+        WHERE exam_id = #{examId} AND student_id = #{studentId}
+    </select>
 
     <!-- 提交试卷   -->
     <update id="submitExam">

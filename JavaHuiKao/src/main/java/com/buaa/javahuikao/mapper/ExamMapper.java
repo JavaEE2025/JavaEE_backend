@@ -56,4 +56,6 @@ public interface ExamMapper {
 
     //获取所有参考学生状态
     List<StatusInfoDTO> getAllStudentStatusByExamId(@Param("examId") int examId);
+
+    Exam getExamInfo(int examId);
 }

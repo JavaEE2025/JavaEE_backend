@@ -27,5 +27,6 @@ public interface ExamService {
     List<Exam> getStudentExams(int userId, String status);
     ExamDTO createExam(ExamDTO examDTO);
 
-
+    //  学生进入考试时 获取考试信息
+    Exam getExamInfo(int examId);
 }

@@ -38,15 +38,13 @@ public class StudentAnswersContentController {
 
     @CrossOrigin
     @PostMapping({"/submit/answer"})
-    public ResponseEntity<?> submitSingleAnswer(@RequestBody SingleAnswersContentDTO singleAnswersContentDTO) {
+    public void submitSingleAnswer(@RequestBody SingleAnswersContentDTO singleAnswersContentDTO) {
         System.out.println("singleAnswersContentDTO:"+singleAnswersContentDTO);
         try{
             studentAnswersContentService.submitAnswer(singleAnswersContentDTO);
-            return ResponseEntity.ok().build();
         }
         catch(Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

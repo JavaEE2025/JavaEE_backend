@@ -23,12 +23,14 @@ public interface StudentAnswersMapper {
     int getStudentAnswersId(int studentId, int examId);
 
     //答题进度修改
-    int incrementProgress(@Param("studentId") int studentId,
+    void incrementProgress(@Param("studentId") int studentId,
                            @Param("examId") int examId);
 
-    int decrementProgress(@Param("studentId") int studentId,
+    void decrementProgress(@Param("studentId") int studentId,
                            @Param("examId") int examId);
 
+    int getProgress(@Param("studentId") int studentId,
+                    @Param("examId") int examId);
     //学生交卷
     void submitExam (int examId,int studentId);
 

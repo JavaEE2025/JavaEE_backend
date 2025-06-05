@@ -53,4 +53,9 @@ public class ExamServiceImpl implements ExamService {
         examMapper.initStudentAnswersContent(examDTO.getId(), examDTO.getQuestions(), studentIds);
         return examDTO;
     }
+
+    @Override
+    public Exam getExamInfo(int examId){
+        return examMapper.getExamInfo(examId);
+    }
 }

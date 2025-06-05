@@ -138,7 +138,7 @@
                 LEFT JOIN
             student_answers sa ON u.id = sa.student_id AND sa.exam_id = #{examId}
         WHERE
-            ec.exam_id = #{examId}
+            ec.exam_id = #{examId} AND u.type = 'student'
     </select>
 
         <!--  查找参加考试的班级列表  -->
@@ -147,4 +147,9 @@
             FROM exam_class
             WHERE exam_id = #{examId}
         </select>
+    <select id="getExamInfo" resultType="com.buaa.javahuikao.entity.Exam" parameterType="int">
+        SELECT *
+        FROM exams
+        WHERE id = #{examId}
+    </select>
 </mapper>
