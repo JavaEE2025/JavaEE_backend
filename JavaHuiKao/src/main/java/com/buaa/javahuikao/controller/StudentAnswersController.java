@@ -45,7 +45,8 @@ public class StudentAnswersController {
             });
 
             studentAnswersService.submitExamAnswers(dto);
-            markController.autoMarkObjective(dto.getExam_id());
+            // 下面报错会导致交卷失败，先注了
+//            markController.autoMarkObjective(dto.getExam_id());
             return ResponseEntity.ok().build();
         }
         catch(Exception e){
