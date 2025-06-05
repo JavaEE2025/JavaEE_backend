@@ -51,6 +51,9 @@ public interface ExamMapper {
     // 3. 已结束
     List<Exam> getCompletedExams(int userId);
 
+    // 获取题目id
+    List<Integer> getQuestionIdsByExamId(@Param("examId") Integer examId);
+
     //获取参考班级
     List<Integer> getClassIdsByExamId(@Param("examId") Integer examId);
 
@@ -58,4 +61,9 @@ public interface ExamMapper {
     List<StatusInfoDTO> getAllStudentStatusByExamId(@Param("examId") int examId);
 
     Exam getExamInfo(int examId);
+
+    // 编辑考试
+    void editExam(Exam exam);
+    // 删除考试
+    void deleteExam(int examId);
 }

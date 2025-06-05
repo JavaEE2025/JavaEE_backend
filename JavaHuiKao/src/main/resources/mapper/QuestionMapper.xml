@@ -18,6 +18,15 @@
         </foreach>
     </insert>
 
+    <insert id="insertOptions">
+        INSERT INTO options
+            (question_id, `option`, is_correct)
+        VALUES
+            <foreach collection="options" item="option" separator=",">
+                (#{questionId}, #{option.content}, #{option.isCorrect})
+            </foreach>
+    </insert>
+
     <resultMap id="QuestionWithKp" type="com.buaa.javahuikao.dto.QuestionDTO">
         <id property="id" column="id"/>
         <result property="topic"       column="topic"/>
@@ -33,12 +42,18 @@
 
     <select id="findAllQuestions" resultMap="QuestionWithKp">
         SELECT * FROM questions
+        <if test="type != null and type != ''">
+            WHERE type = #{type}
+        </if>
     </select>
 
     <select id="searchByKeyword" resultMap="QuestionWithKp">
         SELECT *
         FROM questions
         WHERE MATCH(topic, method, source) AGAINST(#{keyword} IN BOOLEAN MODE)
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
     </select>
 
     <resultMap id="objectiveMap" type="com.buaa.javahuikao.dto.ObjectiveQuestionDTO">

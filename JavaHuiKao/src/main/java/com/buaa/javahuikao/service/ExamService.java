@@ -29,4 +29,6 @@ public interface ExamService {
 
     //  学生进入考试时 获取考试信息
     Exam getExamInfo(int examId);
+    void editExam(ExamDTO examDTO);
+    void deleteExam(int examId);
 }

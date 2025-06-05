@@ -20,7 +20,7 @@ import java.time.LocalTime;
 public class Exam {
     private int id;
     private String name;
-    private int classId;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
     private LocalTime duration;
     private boolean marked = false; //是否批改
@@ -28,10 +28,9 @@ public class Exam {
 
     public Exam() {}
 
-    public Exam(int id, String name, int classId, LocalDateTime startTime, LocalTime duration) {
+    public Exam(int id, String name, LocalDateTime startTime, LocalTime duration) {
         this.id = id;
         this.name = name;
-        this.classId = classId;
         this.startTime = startTime;
         this.duration = duration;
     }
@@ -41,8 +40,6 @@ public class Exam {
     public void setId(int id) { this.id = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public int getClassId() { return classId; }
-    public void setClassId(int classId) { this.classId = classId; }
     public LocalDateTime getStartTime() { return startTime; }
     public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
     public LocalTime getDuration() { return duration; }
