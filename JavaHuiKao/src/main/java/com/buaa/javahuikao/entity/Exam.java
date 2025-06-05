@@ -25,6 +25,7 @@ public class Exam {
     private LocalTime duration;
     private boolean marked = false; //是否批改
     private double sumScore; // 考试总分
+    private int questionCount; // 题目数量
 
     public Exam() {}
 
@@ -53,5 +54,13 @@ public class Exam {
 
     public void setSumScore(double sumScore) {
         this.sumScore = sumScore;
+    }
+
+    public int getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(int questionCount) {
+        this.questionCount = questionCount;
     }
 }
