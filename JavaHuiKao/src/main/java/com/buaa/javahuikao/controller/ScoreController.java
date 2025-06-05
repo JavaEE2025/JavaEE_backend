@@ -1,10 +1,7 @@
 package com.buaa.javahuikao.controller;
 
 
-import com.buaa.javahuikao.dto.AllScoreDTO;
-import com.buaa.javahuikao.dto.QuestionsDTO;
-import com.buaa.javahuikao.dto.ReportDTO;
-import com.buaa.javahuikao.dto.ScoreDTO;
+import com.buaa.javahuikao.dto.*;
 import com.buaa.javahuikao.service.ScoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +78,9 @@ public class ScoreController {
             List<QuestionsDTO> singleQuestion=scoreService.getSingleQuestion(exam_id,student_id);
             //多选
             List<QuestionsDTO> multipleQuestion=scoreService.getMultipleQuestion(exam_id,student_id);
+            for(QuestionsDTO questionDTO:multipleQuestion){
+                questionDTO.setOptions(scoreService.getOption(exam_id,questionDTO.getQuestion_id()));
+            }
             //填空
             List<QuestionsDTO> fillQuestion=scoreService.getFillQuestion(exam_id,student_id);
             //大题

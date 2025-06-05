@@ -191,6 +191,7 @@
 
     <!--    多选-->
     <resultMap id="MultipleMap" type="com.buaa.javahuikao.dto.QuestionsDTO">
+        <id column="question_id" property="question_id" />
         <id column="id" property="id" />
         <result column="topic" property="topic" />
         <result column="parse" property="parse" />
@@ -201,9 +202,6 @@
         <result column="class_rate" property="classRate" />
         <result column="yourRate" property="yourRate" />
         <result column="hasCorrect" property="hasCorrect" />
-        <collection property="options" ofType="com.buaa.javahuikao.dto.QuestionsDTO$OptionContent">
-            <result column="optionContent" property="content" />
-        </collection>
         <collection property="answers" ofType="java.lang.String">
             <result column="correct_answer_split" property="answers" />
         </collection>
@@ -221,12 +219,12 @@
                qs.type as type,
                sac.score as score,
                eq.score as totalScore,
+               sac.question_id as question_id,
                ROUND(
                        AVG(sac.score) OVER (PARTITION BY eq.exam_id, qs.id) / eq.score * 100,
                        1
                ) AS class_rate,
                ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
-               os.option AS optionContent,
                CASE
                    WHEN sac.score!=eq.score THEN false
                    ELSE true
@@ -265,6 +263,21 @@
         ORDER BY
             eq.number,
             os.id;
+    </select>
+
+    <resultMap id="optionMap" type="com.buaa.javahuikao.dto.QuestionsDTO$OptionContent">
+        <result column="optionContent" property="content" />
+    </resultMap>
+
+    <select id="getOption" resultMap="optionMap">
+        SELECT
+            os.option AS optionContent
+        FROM
+            options os
+        WHERE
+            os.question_id = #{questionId}
+        ORDER BY
+            os.id
     </select>
 
     <!--  填空  -->

@@ -66,4 +66,9 @@ public class ScoreServiceImpl implements ScoreService {
     public List<QuestionsDTO> getAnswerQuestion(int examId, int studentId) {
         return scoreMapper.getAnswerQuestion(examId,studentId);
     }
+
+    @Override
+    public List<QuestionsDTO.OptionContent> getOption(int examId, int id) {
+        return scoreMapper.getOption(examId,id);
+    }
 }

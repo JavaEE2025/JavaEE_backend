@@ -11,6 +11,7 @@ import java.util.List;
  */
 
 public class QuestionsDTO {
+    private int question_id;
     private int id;
     private Boolean hasCorrect;
     private String topic;
@@ -157,7 +158,15 @@ public class QuestionsDTO {
         return options;
     }
 
-    private static class OptionContent{
+    public int getQuestion_id() {
+        return question_id;
+    }
+
+    public String getParse() {
+        return parse;
+    }
+
+    public static class OptionContent{
         private String content;
 
         public String getContent() {

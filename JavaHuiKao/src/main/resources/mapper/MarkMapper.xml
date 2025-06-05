@@ -137,13 +137,11 @@
     </select>
 
     <update id="updateMultiple">
-        <foreach collection="scoreList.entrySet()" item="entry" separator=";">
-            UPDATE student_answers_content
-            SET score = #{entry.value}
-            WHERE exam_id = #{examId}
-            AND question_id = #{questionId}
-            AND student_id = #{entry.key}
-        </foreach>
+        UPDATE student_answers_content
+        SET score = #{score}
+        WHERE question_id = #{questionId}
+        AND exam_id = #{examId}
+        AND student_id = #{studentId}
     </update>
 
     <select id="getId" resultType="java.lang.Integer">
@@ -163,12 +161,12 @@
     <select id="getObjectiveMark" resultType="java.lang.Boolean">
         SELECT objectiveMark
         FROM exams
-        WHERE exam_id=#{examId}
+        WHERE id=#{examId}
     </select>
 
     <update id="updateMark">
         UPDATE exams
         SET objectiveMark=true
-        WHERE exam_id=#{examId}
+        WHERE id=#{examId}
     </update>
 </mapper>

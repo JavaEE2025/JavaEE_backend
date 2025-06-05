@@ -33,4 +33,6 @@ public interface ScoreMapper {
     List<QuestionsDTO> getFillQuestion(int examId, int studentId);
 
     List<QuestionsDTO> getAnswerQuestion(int examId, int studentId);
+
+    List<QuestionsDTO.OptionContent> getOption(int examId, int questionId);
 }

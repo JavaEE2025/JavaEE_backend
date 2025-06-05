@@ -66,7 +66,7 @@ public interface MarkMapper{
     List<StudentAnswersContent> getAnswerList(int examId, int questionId);
 
     //更新多选题分数
-    void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId);
+    int updateMultiple(Double score,int questionId, int examId,int studentId);
 
     //获取题目在考试中的题号
     int getId(int examId, int questionId);

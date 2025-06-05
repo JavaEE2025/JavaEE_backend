@@ -102,8 +102,13 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
-    public void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId) {
-        markMapper.updateMultiple(scoreList,questionId,examId);
+    public void updateMultiple(int questionId, int examId,int studentId,Double score) {
+        int row=markMapper.updateMultiple(score,questionId,examId,studentId);
+        if(row>0){
+            System.out.println("更新成功");
+        }else{
+            System.out.println("更新失败");
+        }
     }
 
     @Override

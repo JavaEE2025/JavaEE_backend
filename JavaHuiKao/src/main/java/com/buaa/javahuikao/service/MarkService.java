@@ -53,7 +53,7 @@ public interface MarkService {
 
     List<StudentAnswersContent> getAnswerList(int examId, int questionId);
 
-    void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId);
+    void updateMultiple(int questionId, int examId,int studentId,Double score);
 
     int getId(int examId, int questionId);
 

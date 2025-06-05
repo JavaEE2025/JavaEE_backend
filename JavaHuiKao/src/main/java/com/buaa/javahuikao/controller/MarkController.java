@@ -48,6 +48,8 @@ public class MarkController {
     @Autowired
     private QuestionService questionService;
 
+    public Map<Integer, Double> scoreList;
+
     /**
      * @description: 获取判卷总览（特定考试）
      * @date: 2025/5/27 10:00
@@ -59,11 +61,11 @@ public class MarkController {
         Map<String, Object> map = new HashMap();
         try{
             //初次调用先检查是否判过选择题，如果没判过自动判
-//            Boolean objectiveMark=markService.getObjectiveMark(exam_id);
-//            if(!objectiveMark){
-//                autoMarkObjective(exam_id);
-//                markService.updateMark(exam_id);
-//            }
+            Boolean objectiveMark=markService.getObjectiveMark(exam_id);
+            if(!objectiveMark){
+                autoMarkObjective(exam_id);
+                markService.updateMark(exam_id);
+            }
             //考试信息
             Exam exam=markService.getExamInfo(exam_id);
             map.put("exam_name",exam.getName());
@@ -238,28 +240,35 @@ public class MarkController {
                     .map(Option::getId)
                     .toList();
             List<StudentAnswersContent> studentAnswersContents=markService.getAnswerList(exam_id,question_id);
-            Map<Integer, Double> scoreList=new HashMap<>();
             for(StudentAnswersContent studentAnswersContent:studentAnswersContents){
-                List<String> studentAnswer = Arrays.asList(studentAnswersContent.getOptionAnswer().split(";"));
-                List<Integer> studentSelectedIds = studentAnswer.stream()
-                        .map(Integer::valueOf)
-                        .toList();
-
+                String optionAnswer=studentAnswersContent.getOptionAnswer();
                 double calculatedScore = 0.0;
-                boolean hasWrongOption = studentSelectedIds.stream()
-                        .anyMatch(id -> !correctOptionIds.contains(id));
-                if (hasWrongOption) {
-                    calculatedScore = 0.0;
-                } else if (studentSelectedIds.size() == correctOptionIds.size()) {
-                    calculatedScore = score;
-                } else if (studentSelectedIds.size() < correctOptionIds.size()) {
-                    calculatedScore = Math.round(score * 2 / 3 * 10) / 10.0;
-                }
+                if(optionAnswer!=null){
+                    List<String> studentAnswer = Arrays.asList(optionAnswer.split(";"));
+                    List<Integer> studentSelectedIds = studentAnswer.stream()
+                            .map(Integer::valueOf)
+                            .toList();
 
-                scoreList.put(studentAnswersContent.getStudent_id(), calculatedScore);
+
+                    boolean hasWrongOption = studentSelectedIds.stream()
+                            .anyMatch(id -> !correctOptionIds.contains(id));
+                    if (hasWrongOption) {
+                        calculatedScore = 0.0;
+                    } else if (studentSelectedIds.size() == correctOptionIds.size()) {
+                        calculatedScore = score;
+                    } else if (studentSelectedIds.size() < correctOptionIds.size()) {
+                        calculatedScore = Math.round(score * 2 / 3 * 10) / 10.0;
+                    }
+
+                }
+                //将得分结果更新到数据库
+                markService.updateMultiple(question_id,exam_id,studentAnswersContent.getStudentId(),calculatedScore);
             }
-            //将得分结果更新到数据库
-            markService.updateMultiple(scoreList,question_id,exam_id);
+            Boolean stillHave=markService.checkStillHave(exam_id);
+            if(!stillHave){
+                //没有没判完的题了，修改状态，计算总分
+                computeSumScore(exam_id);
+            }
         }
     }
 
