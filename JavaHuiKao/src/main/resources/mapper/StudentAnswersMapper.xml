@@ -14,7 +14,7 @@
     <!--  学生进入考试  -->
     <update id="beginExam">
         UPDATE student_answers
-        SET progress = 0, status = '正常'
+        SET progress = 0, status = '考试中'
         WHERE exam_id = #{examId} AND student_id = #{studentId}
     </update>
 
@@ -42,7 +42,7 @@
     <!-- 提交试卷   -->
     <update id="submitExam">
         UPDATE student_answers
-        SET is_final = true
+        SET is_final = true,status = '已交卷'
         WHERE exam_id = #{examId} AND student_id = #{studentId}
     </update>
 
@@ -53,4 +53,5 @@
             status = '异常'
         WHERE exam_id = #{examId} AND student_id = #{studentId}
     </update>
+
 </mapper>

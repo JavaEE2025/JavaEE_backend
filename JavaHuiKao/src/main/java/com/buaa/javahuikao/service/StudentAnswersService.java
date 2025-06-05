@@ -54,6 +54,8 @@ public class StudentAnswersService {
             SACDTO.setAnswer(QADTO.getAnswer());
             studentAnswersContentService.submitAnswer(SACDTO);
         }
+        invigilationController.singleStatusNotify(exam_id,student_id,"已交卷", "");
+
     }
 
     @Async("statusUpdateExecutor")
@@ -62,7 +64,7 @@ public class StudentAnswersService {
         int student_id = behaviorDTO.getStudent_id();
         String status = behaviorDTO.getBehavior_type();
         //更新数据库
-        if("正常".equals(status)){
+        if("考试中".equals(status)){
             studentAnswersMapper.beginExam(exam_id,student_id);
         }
         else if("异常".equals(status)){
