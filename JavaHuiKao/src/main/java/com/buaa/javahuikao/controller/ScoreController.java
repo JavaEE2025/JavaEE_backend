@@ -42,7 +42,7 @@ public class ScoreController {
     @CrossOrigin
     @PostMapping({"/teacher/getScore"})
     public ResponseEntity<AllScoreDTO> getScoreOverall(@RequestBody Map<String, Object> scoreMap) {
-        int exam_id = Integer.parseInt((String) scoreMap.get("exam_id"));
+        int exam_id =(int) scoreMap.get("exam_id");
         try{
             //获得优秀标准
             float excellent_line=scoreService.getExcellentLine(exam_id);
@@ -104,7 +104,7 @@ public class ScoreController {
                 belowPassCount++;
             }
         }
-        ScoreDistribution belowPass = new ScoreDistribution("及格以下", belowPassCount);
+        ScoreDistribution belowPass = new ScoreDistribution(String.format("%.0f以下", passLine), belowPassCount);
         scoreDistributionData.add(belowPass);
 
         float interval = (excellentLine - passLine) / 3;

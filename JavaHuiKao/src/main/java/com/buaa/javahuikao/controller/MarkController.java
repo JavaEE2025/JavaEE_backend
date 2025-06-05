@@ -58,6 +58,12 @@ public class MarkController {
         int exam_id = Integer.parseInt((String) markMap.get("id"));
         Map<String, Object> map = new HashMap();
         try{
+            //初次调用先检查是否判过选择题，如果没判过自动判
+//            Boolean objectiveMark=markService.getObjectiveMark(exam_id);
+//            if(!objectiveMark){
+//                autoMarkObjective(exam_id);
+//                markService.updateMark(exam_id);
+//            }
             //考试信息
             Exam exam=markService.getExamInfo(exam_id);
             map.put("exam_name",exam.getName());
@@ -76,14 +82,14 @@ public class MarkController {
             List<SubjectiveQuestionDTO> subjectiveQuestionDTOS = questionService.getSubjectiveQuestions(exam_id);
             for(SubjectiveQuestionDTO subjectiveQuestionDTO:subjectiveQuestionDTOS){
                 int processPerson=subjectiveQuestionDTO.getProcess();
-                if(processPerson==exam_real_person){
+                if(processPerson>=exam_real_person){
                     //不可以继续判卷
                     subjectiveQuestionDTO.setAction(false);
                 }else{
                     subjectiveQuestionDTO.setAction(true);
                 }
                 //设置为比例
-                subjectiveQuestionDTO.setProcess(processPerson/exam_real_person);
+                subjectiveQuestionDTO.setProcess(processPerson/exam_real_person*100);
             }
             map.put("subjective", subjectiveQuestionDTOS);
             //查询是否还有没判的题
@@ -131,7 +137,7 @@ public class MarkController {
     public Map<String, Object> submitMark(@RequestBody Map<String, Object> submitMap) {
         int exam_id = Integer.parseInt((String) submitMap.get("exam_id"));
         int question_id = Integer.parseInt((String) submitMap.get("problem_id"));
-        int student_id = Integer.parseInt((String) submitMap.get("student_id"));
+        int student_id =(int)submitMap.get("student_id");
         float score = ((Number) submitMap.get("score")).floatValue();
         String comment= (String) submitMap.get("comment");
         Map<String, Object> map = new HashMap();
@@ -180,26 +186,33 @@ public class MarkController {
                 //再获取作答
                 Map<String,Object> answer=markService.getAnswerBy2Id(exam_id,question_id,student_id);
                 question_info.putAll(answer);
+                //获取题目在本场考试的id
+                int id=markService.getId(exam_id,question_id);
+                question_info.put("id",id);
                 return question_info;
             }else if(question_id != -1) {
-                //获取特定题目的作答
-                //先获取题目信息
-                Map<String,Object> question_info=markService.getQuestionInfo(exam_id,question_id);
-                //再获取作答
-                Map<String,Object> answer=markService.getAnswerBy1Id(exam_id,question_id);
-                question_info.putAll(answer);
-                return question_info;
-            }else{
-                //模糊获取
-                Map<String,Object> answer=markService.getAnswer(exam_id);
-                if(answer.containsKey("question_id")){
-                    int problem_id= (int) answer.get("question_id");
-                    Map<String,Object> question_info=markService.getQuestionInfo(exam_id,problem_id);
-                    answer.remove("question_id");
-                    answer.putAll(question_info);
-                    return answer;
+                //先检查本题目是否还有没判卷的
+                int thisQuestionCount=markService.getThisQuestionCount(exam_id,question_id);
+                if(thisQuestionCount!=0){
+                    //获取特定题目的作答
+                    //先获取题目信息
+                    Map<String,Object> question_info=markService.getQuestionInfo(exam_id,question_id);
+                    //再获取作答
+                    Map<String,Object> answer=markService.getAnswerBy1Id(exam_id,question_id);
+                    question_info.putAll(answer);
+                    return question_info;
                 }
             }
+            //模糊获取
+            Map<String,Object> answer=markService.getAnswer(exam_id);
+            if(answer.containsKey("question_id")){
+                int problem_id= (int) answer.get("question_id");
+                Map<String,Object> question_info=markService.getQuestionInfo(exam_id,problem_id);
+                answer.remove("question_id");
+                answer.putAll(question_info);
+                return answer;
+            }
+
         }catch (Exception e){
             log.error("getAnswer: ", e);
         }

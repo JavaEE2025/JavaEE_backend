@@ -30,7 +30,6 @@ public class StudentAnswersController {
     public ResponseEntity<?> submitExam(@RequestBody StudentExamAnswersDTO dto){
         try{
             studentAnswersService.submitExamAnswers(dto);
-            markController.autoMarkObjective(dto.getExam_id());
             return ResponseEntity.ok().build();
         }
         catch(Exception e){

@@ -67,4 +67,16 @@ public interface MarkMapper{
 
     //更新多选题分数
     void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId);
+
+    //获取题目在考试中的题号
+    int getId(int examId, int questionId);
+
+    //获取是否还有对应题目的没判的
+    int getThisQuestionCount(int examId, int questionId);
+
+    //判断客观题判没判
+    Boolean getObjectiveMark(int examId);
+
+    //更新该字段
+    void updateMark(int examId);
 }

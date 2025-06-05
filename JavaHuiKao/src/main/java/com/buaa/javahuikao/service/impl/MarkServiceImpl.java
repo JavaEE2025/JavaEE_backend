@@ -105,4 +105,24 @@ public class MarkServiceImpl implements MarkService {
     public void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId) {
         markMapper.updateMultiple(scoreList,questionId,examId);
     }
+
+    @Override
+    public int getId(int examId, int questionId) {
+        return markMapper.getId(examId,questionId);
+    }
+
+    @Override
+    public int getThisQuestionCount(int examId, int questionId) {
+        return markMapper.getThisQuestionCount(examId,questionId);
+    }
+
+    @Override
+    public Boolean getObjectiveMark(int examId) {
+        return markMapper.getObjectiveMark(examId);
+    }
+
+    @Override
+    public void updateMark(int examId) {
+        markMapper.updateMark(examId);
+    }
 }

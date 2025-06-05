@@ -108,11 +108,11 @@
                exams.duration as exam_duration,
                exams.sum_score as sum_score,
                sa.sum_score as totalScore
-        from users,student_answers as sa,exams
+        from users,student_answers as sa
+        JOIN exams ON sa.exam_id=exams.id
         where sa.exam_id=#{examId}
         AND sa.student_id=#{studentId}
         AND sa.student_id=users.id
-        AND exams.id=sa.exam_id
     </select>
 
     <!--单选:
