@@ -27,8 +27,11 @@
 
     <select id="checkStillHave" resultType="java.lang.Integer">
         select count(*)
-        from student_answers_content
-        where exam_id=#{examId} and score is null
+        from student_answers_content as sac
+        JOIN questions
+        ON questions.id=sac.question_id
+        where sac.exam_id=#{examId} and sac.score is null
+        AND type IN ('fill','answer')
     </select>
 
     <update id="updateProcess">
@@ -141,5 +144,31 @@
             AND question_id = #{questionId}
             AND student_id = #{entry.key}
         </foreach>
+    </update>
+
+    <select id="getId" resultType="java.lang.Integer">
+        SELECT number
+        FROM exam_question
+        WHERE exam_id=#{examId} AND question_id=#{questionId}
+    </select>
+
+    <select id="getThisQuestionCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM student_answers_content
+        WHERE exam_id=#{examId}
+        AND question_id=#{questionId}
+        AND score IS NULL
+    </select>
+
+    <select id="getObjectiveMark" resultType="java.lang.Boolean">
+        SELECT objectiveMark
+        FROM exams
+        WHERE exam_id=#{examId}
+    </select>
+
+    <update id="updateMark">
+        UPDATE exams
+        SET objectiveMark=true
+        WHERE exam_id=#{examId}
     </update>
 </mapper>

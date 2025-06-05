@@ -54,4 +54,12 @@ public interface MarkService {
     List<StudentAnswersContent> getAnswerList(int examId, int questionId);
 
     void updateMultiple(Map<Integer, Double> scoreList, int questionId, int examId);
+
+    int getId(int examId, int questionId);
+
+    int getThisQuestionCount(int examId, int questionId);
+
+    Boolean getObjectiveMark(int examId);
+
+    void updateMark(int examId);
 }
