@@ -66,8 +66,8 @@ public class ScoreController {
     @CrossOrigin
     @PostMapping({"/student/scorelist"})
     public ResponseEntity<ReportDTO> getScoreList(@RequestBody Map<String, Object> scoreMap) {
-        int exam_id = Integer.parseInt((String) scoreMap.get("exam_id"));
-        int student_id = Integer.parseInt((String) scoreMap.get("student_id"));
+        int exam_id = (int) scoreMap.get("exam_id");
+        int student_id = (int)scoreMap.get("student_id");
         try{
             //获得考试相关信息和学生相关
             ReportDTO reportDTO=scoreService.getDetailInfo(exam_id,student_id);

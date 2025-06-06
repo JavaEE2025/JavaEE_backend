@@ -176,14 +176,14 @@
                    WHEN sac.score!=eq.score THEN false
                    ELSE true
                END AS hasCorrect
-        from questions as qs,student_answers_content as sac,exam_question as eq,options as os
+        from questions as qs
+        JOIN student_answers_content as sac ON qs.id=sac.question_id
+        JOIN exam_question as eq ON eq.exam_id=sac.exam_id
+        JOIN options as os ON sac.question_id=os.question_id
         where sac.exam_id=#{examId}
               AND sac.student_id=#{studentId}
-              AND qs.id=sac.question_id
               AND qs.type='single'
               AND eq.question_id=sac.question_id
-              AND eq.exam_id=sac.exam_id
-              AND sac.question_id=os.question_id
         ORDER BY
               eq.number,
               os.id;
@@ -316,13 +316,12 @@
                    WHEN sac.score!=eq.score THEN false
                    ELSE true
                END AS hasCorrect
-        from questions as qs,student_answers_content as sac,exam_question as eq
+        from questions as qs
+        JOIN student_answers_content as sac ON qs.id=sac.question_id
+        JOIN exam_question as eq ON eq.exam_id=sac.exam_id AND eq.question_id=sac.question_id
         where sac.exam_id=#{examId}
           AND sac.student_id=#{studentId}
-          AND qs.id=sac.question_id
           AND qs.type='fill'
-          AND eq.question_id=sac.question_id
-          AND eq.exam_id=sac.exam_id
         ORDER BY
             eq.number
     </select>
@@ -365,13 +364,12 @@
                    WHEN sac.score!=eq.score THEN false
                    ELSE true
                END AS hasCorrect
-        from questions as qs,student_answers_content as sac,exam_question as eq
+        from questions as qs
+        JOIN student_answers_content as sac ON qs.id=sac.question_id
+        JOIN exam_question as eq ON eq.exam_id=sac.exam_id AND eq.question_id=sac.question_id
         where sac.exam_id=#{examId}
           AND sac.student_id=#{studentId}
-          AND qs.id=sac.question_id
           AND qs.type='answer'
-          AND eq.question_id=sac.question_id
-          AND eq.exam_id=sac.exam_id
         ORDER BY
             eq.number
     </select>

@@ -55,4 +55,10 @@
             <result property="teacherName" column="teacher_name"/>
         </association>
     </resultMap>
+
+    <select id="getName" resultType="java.lang.String">
+        SELECT username
+        FROM users
+        WHERE id=#{studentId}
+    </select>
 </mapper>

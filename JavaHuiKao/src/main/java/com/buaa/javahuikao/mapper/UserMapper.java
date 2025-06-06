@@ -26,4 +26,6 @@ public interface UserMapper {
     UserInfoDTO getUserInfo(int userId);
 
     List<UserInfoDTO.OwnClass> getTeacherClasses(int userId);
+
+    String getName(int studentId);
 }

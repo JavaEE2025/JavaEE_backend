@@ -46,4 +46,8 @@ public class UserService {
 
         return userInfo;
     }
+
+    public String getName(int studentId) {
+        return userMapper.getName(studentId);
+    }
 }

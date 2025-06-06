@@ -8,10 +8,7 @@ import com.buaa.javahuikao.dto.SubjectiveQuestionDTO;
 import com.buaa.javahuikao.entity.Option;
 import com.buaa.javahuikao.entity.Question;
 import com.buaa.javahuikao.entity.StudentAnswersContent;
-import com.buaa.javahuikao.service.ClassService;
-import com.buaa.javahuikao.service.MarkService;
-import com.buaa.javahuikao.service.QuestionService;
-import com.buaa.javahuikao.service.StudentAnswersService;
+import com.buaa.javahuikao.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +46,8 @@ public class MarkController {
     private QuestionService questionService;
 
     public Map<Integer, Double> scoreList;
+    @Autowired
+    private UserService userService;
 
     /**
      * @description: 获取判卷总览（特定考试）
@@ -57,7 +56,7 @@ public class MarkController {
     @CrossOrigin
     @PostMapping({"/teacher/exam_marking_overall"})
     public Map<String, Object> examMarkOverall(@RequestBody Map<String, Object> markMap) {
-        int exam_id = Integer.parseInt((String) markMap.get("id"));
+        int exam_id = (int)markMap.get("id");
         Map<String, Object> map = new HashMap();
         try{
             //初次调用先检查是否判过选择题，如果没判过自动判
@@ -110,8 +109,8 @@ public class MarkController {
     @CrossOrigin
     @PostMapping({"/teacher/problem_mark"})
     public Map<String, Object> problemMark(@RequestBody Map<String, Object> problemMarkMap) {
-        int exam_id = Integer.parseInt((String) problemMarkMap.get("exam_id"));
-        int question_id = Integer.parseInt((String) problemMarkMap.get("problem_id"));
+        int exam_id = (int)problemMarkMap.get("exam_id");
+        int question_id = (int) problemMarkMap.get("problem_id");
         Map<String, Object> map = new HashMap();
         try{
             List<ProblemMarkDTO> markList=markService.genMarkList(exam_id,question_id);
@@ -137,8 +136,8 @@ public class MarkController {
     @CrossOrigin
     @PostMapping({"/teacher/submitScore"})
     public Map<String, Object> submitMark(@RequestBody Map<String, Object> submitMap) {
-        int exam_id = Integer.parseInt((String) submitMap.get("exam_id"));
-        int question_id = Integer.parseInt((String) submitMap.get("problem_id"));
+        int exam_id = (int) submitMap.get("exam_id");
+        int question_id = (int)submitMap.get("problem_id");
         int student_id =(int)submitMap.get("student_id");
         float score = ((Number) submitMap.get("score")).floatValue();
         String comment= (String) submitMap.get("comment");
@@ -171,14 +170,14 @@ public class MarkController {
     @CrossOrigin
     @PostMapping({"/teacher/getAnswer"})
     public Map<String, Object> getAnswer(@RequestBody Map<String, Object> answerMap) {
-        int exam_id = Integer.parseInt((String) answerMap.get("exam_id"));
+        int exam_id = (int) answerMap.get("exam_id");
         int question_id=-1;
         int student_id=-1;
-        if(answerMap.containsKey("problem_id")){
-            question_id= Integer.parseInt((String) answerMap.get("problem_id"));
+        if(answerMap.containsKey("problem_id")&&answerMap.get("problem_id")!=null){
+            question_id= (int)answerMap.get("problem_id");
         }
-        if(answerMap.containsKey("student_id")){
-            student_id = Integer.parseInt((String) answerMap.get("student_id"));
+        if(answerMap.containsKey("student_id")&&answerMap.get("student_id")!=null){
+            student_id =(int)answerMap.get("student_id");
         }
         try{
             if(question_id!=-1&&student_id!=-1){
@@ -191,6 +190,9 @@ public class MarkController {
                 //获取题目在本场考试的id
                 int id=markService.getId(exam_id,question_id);
                 question_info.put("id",id);
+                //获取学生的名字
+                String student_name=userService.getName(student_id);
+                question_info.put("student_name",student_name);
                 return question_info;
             }else if(question_id != -1) {
                 //先检查本题目是否还有没判卷的
@@ -201,6 +203,9 @@ public class MarkController {
                     Map<String,Object> question_info=markService.getQuestionInfo(exam_id,question_id);
                     //再获取作答
                     Map<String,Object> answer=markService.getAnswerBy1Id(exam_id,question_id);
+                    student_id= (int) answer.get("student_id");
+                    String student_name=userService.getName(student_id);
+                    question_info.put("student_name",student_name);
                     question_info.putAll(answer);
                     return question_info;
                 }
@@ -210,7 +215,10 @@ public class MarkController {
             if(answer.containsKey("question_id")){
                 int problem_id= (int) answer.get("question_id");
                 Map<String,Object> question_info=markService.getQuestionInfo(exam_id,problem_id);
-                answer.remove("question_id");
+//                answer.remove("question_id");
+                student_id= (int) answer.get("student_id");
+                String student_name=userService.getName(student_id);
+                question_info.put("student_name",student_name);
                 answer.putAll(question_info);
                 return answer;
             }
