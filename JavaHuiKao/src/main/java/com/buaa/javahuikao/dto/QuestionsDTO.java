@@ -18,7 +18,7 @@ public class QuestionsDTO {
     private String comment;
     private String correct_answer;
     private String parse;
-    private String image;
+    private byte[] image;
     private String type;
     private double score;
     private double totalScore;
@@ -50,7 +50,7 @@ public class QuestionsDTO {
         this.correct_answer = correct_answer;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
@@ -114,7 +114,7 @@ public class QuestionsDTO {
         return correct_answer;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
