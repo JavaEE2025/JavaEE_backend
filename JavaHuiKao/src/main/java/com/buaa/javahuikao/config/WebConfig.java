@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")  // 改为对所有路径生效
-                .allowedOrigins("http://localhost:8080")
+                .allowedOrigins("http://121.36.92.225:9000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")  // 允许所有头部
                 .allowCredentials(true)
