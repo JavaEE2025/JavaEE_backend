@@ -161,9 +161,9 @@
 
     <insert id="editExam" parameterType="com.buaa.javahuikao.entity.Exam">
         INSERT INTO exams
-            (id, name, start_time, duration, marked, sum_score)
+            (id, name, start_time, duration, marked, sum_score, question_count)
         VALUES
-            (#{id}, #{name}, #{startTime}, #{duration}, #{marked}, #{sumScore})
+            (#{id}, #{name}, #{startTime}, #{duration}, #{marked}, #{sumScore}, #{questionCount})
     </insert>
 
     <delete id="deleteExam" parameterType="int">
