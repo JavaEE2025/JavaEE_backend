@@ -93,8 +93,8 @@ public class TeacherExamController {
             List<Map<String, Object>> options = new ArrayList<>();
             question.getOptions().forEach(option -> {
                 options.add(Map.of(
-                        "option_id", option.getId(),
-                        "content", option.getOption(),
+                        "id", option.getId(),
+                        "option", option.getOption(),
                         "is_correct", option.isCorrect()
                 ));
             });
