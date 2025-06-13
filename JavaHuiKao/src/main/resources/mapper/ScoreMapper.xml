@@ -152,41 +152,56 @@
     </resultMap>
 
     <select id="getSingleQuestion" resultMap="SingleMap">
-        select eq.number as id,
-               qs.topic as topic,
-               qs.parse as parse,
-               sac.img_answer as image,
-               qs.type as type,
-               sac.score as score,
-               eq.score as totalScore,
-               qs.correct_answer as answer,
-               ROUND(
-                       AVG(sac.score) OVER (PARTITION BY eq.exam_id, qs.id) / eq.score * 100,
-                       1
-               ) AS class_rate,
-               ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
-               os.option AS optionContent,
-               CASE
-                   WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) THEN 'A'
-                   WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 1 THEN 'B'
-                   WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 2 THEN 'C'
-                   WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 3 THEN 'D'
-               END AS selected_letter,
-               CASE
-                   WHEN sac.score!=eq.score THEN false
-                   ELSE true
-               END AS hasCorrect
-        from questions as qs
-        JOIN student_answers_content as sac ON qs.id=sac.question_id
-        JOIN exam_question as eq ON eq.exam_id=sac.exam_id
-        JOIN options as os ON sac.question_id=os.question_id
-        where sac.exam_id=#{examId}
-              AND sac.student_id=#{studentId}
-              AND qs.type='single'
-              AND eq.question_id=sac.question_id
+        SELECT
+            eq.number AS id,
+            qs.topic AS topic,
+            qs.parse AS parse,
+            sac.img_answer AS image,
+            qs.type AS type,
+            sac.score AS score,
+            eq.score AS totalScore,
+            qs.correct_answer AS answer,
+            -- 使用子查询计算班级平均分
+            ROUND(class_avg.avg_score / eq.score * 100, 1) AS class_rate,
+            ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
+            os.option AS optionContent,
+            CASE
+                WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) THEN 'A'
+                WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 1 THEN 'B'
+                WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 2 THEN 'C'
+                WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 3 THEN 'D'
+                END AS selected_letter,
+            CASE
+                WHEN sac.score != eq.score THEN false
+                ELSE true
+                END AS hasCorrect
+        FROM
+            questions qs
+                JOIN
+            student_answers_content sac ON qs.id = sac.question_id
+                JOIN
+            exam_question eq ON eq.exam_id = sac.exam_id
+                JOIN
+            options os ON sac.question_id = os.question_id
+                -- 添加子查询获取班级平均分
+                JOIN (
+                SELECT
+                    question_id,
+                    exam_id,
+                    AVG(score) AS avg_score
+                FROM student_answers_content
+                WHERE exam_id = #{examId}
+                GROUP BY question_id, exam_id
+            ) AS class_avg ON class_avg.question_id = sac.question_id AND class_avg.exam_id = sac.exam_id
+        WHERE
+            sac.exam_id = #{examId}
+          AND sac.student_id = #{studentId}
+          AND qs.type = 'single'
+          AND eq.question_id = sac.question_id
         ORDER BY
-              eq.number,
-              os.id;
+            eq.number,
+            os.id;
+
     </select>
 
     <!--    多选-->
@@ -211,32 +226,31 @@
     </resultMap>
 
     <select id="getMultipleQuestion" resultMap="MultipleMap">
-        select eq.number as id,
-               qs.topic as topic,
-               sac.comment as comment,
-               qs.parse as parse,
-               sac.img_answer as image,
-               qs.type as type,
-               sac.score as score,
-               eq.score as totalScore,
-               sac.question_id as question_id,
-               ROUND(
-                       AVG(sac.score) OVER (PARTITION BY eq.exam_id, qs.id) / eq.score * 100,
-                       1
-               ) AS class_rate,
-               ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
-               CASE
-                   WHEN sac.score!=eq.score THEN false
-                   ELSE true
-               END AS hasCorrect,
-               SUBSTRING_INDEX(SUBSTRING_INDEX(qs.correct_answer, '、', n.n), '、', -1) AS correct_answer_split,
-               -- 学生选择的选项ID转换为字母（1;3;4 → A, C, D）
-               CASE
-                   WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) THEN 'A'
-                   WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 1 THEN 'B'
-                   WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 2 THEN 'C'
-                   WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 3 THEN 'D'
-                   END AS selected_letter
+        SELECT
+            eq.number AS id,
+            qs.topic AS topic,
+            sac.comment AS comment,
+            qs.parse AS parse,
+            sac.img_answer AS image,
+            qs.type AS type,
+            sac.score AS score,
+            eq.score AS totalScore,
+            sac.question_id AS question_id,
+            -- 使用子查询计算班级平均分
+            ROUND(class_avg.avg_score / eq.score * 100, 1) AS class_rate,
+            ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
+            CASE
+                WHEN sac.score != eq.score THEN false
+                ELSE true
+                END AS hasCorrect,
+            SUBSTRING_INDEX(SUBSTRING_INDEX(qs.correct_answer, '、', n.n), '、', -1) AS correct_answer_split,
+            -- 学生选择的选项ID转换为字母（1;3;4 → A, C, D）
+            CASE
+                WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) THEN 'A'
+                WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 1 THEN 'B'
+                WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 2 THEN 'C'
+                WHEN os.id = MIN(os.id) OVER (PARTITION BY qs.id) + 3 THEN 'D'
+                END AS selected_letter
         FROM
             questions qs
                 JOIN
@@ -253,13 +267,24 @@
                 -- 用于拆分学生选择的辅助表
                 SELECT 1 AS m UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
             ) m ON CHAR_LENGTH(sac.option_answer) - CHAR_LENGTH(REPLACE(sac.option_answer, ';', '')) >= m.m - 1
-        where sac.exam_id=#{examId}
-          AND sac.student_id=#{studentId}
-          AND qs.id=sac.question_id
-          AND qs.type='multiple'
-          AND eq.question_id=sac.question_id
-          AND eq.exam_id=sac.exam_id
-          AND sac.question_id=os.question_id
+                -- 添加子查询获取班级平均分
+                JOIN (
+                SELECT
+                    question_id,
+                    exam_id,
+                    AVG(score) AS avg_score
+                FROM student_answers_content
+                WHERE exam_id = #{examId}
+                GROUP BY question_id, exam_id
+            ) AS class_avg ON class_avg.question_id = sac.question_id AND class_avg.exam_id = sac.exam_id
+        WHERE
+            sac.exam_id = #{examId}
+          AND sac.student_id = #{studentId}
+          AND qs.id = sac.question_id
+          AND qs.type = 'multiple'
+          AND eq.question_id = sac.question_id
+          AND eq.exam_id = sac.exam_id
+          AND sac.question_id = os.question_id
         ORDER BY
             eq.number,
             os.id;
@@ -297,33 +322,39 @@
     </resultMap>
 
     <select id="getFillQuestion" resultMap="FillMap">
-        select eq.number as id,
-               qs.topic as topic,
-               sac.comment as comment,
-               qs.correct_answer as correct_answer,
-               qs.parse as parse,
-               sac.img_answer as image,
-               sac.text_answer as answer,
-               qs.type as type,
-               sac.score as score,
-               eq.score as totalScore,
-               ROUND(
-                       AVG(sac.score) OVER (PARTITION BY eq.exam_id, qs.id) / eq.score * 100,
-                       1
-               ) AS class_rate,
-               ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
-               CASE
-                   WHEN sac.score!=eq.score THEN false
-                   ELSE true
-               END AS hasCorrect
-        from questions as qs
-        JOIN student_answers_content as sac ON qs.id=sac.question_id
-        JOIN exam_question as eq ON eq.exam_id=sac.exam_id AND eq.question_id=sac.question_id
-        where sac.exam_id=#{examId}
+        SELECT
+            eq.number AS id,
+            qs.topic AS topic,
+            sac.comment AS comment,
+            qs.correct_answer AS correct_answer,
+            qs.parse AS parse,
+            sac.img_answer AS image,
+            sac.text_answer AS answer,
+            qs.type AS type,
+            sac.score AS score,
+            eq.score AS totalScore,
+            ROUND(class_avg.avg_score / eq.score * 100, 1) AS class_rate,
+            ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
+            CASE
+                WHEN sac.score!=eq.score THEN false
+                ELSE true
+                END AS hasCorrect
+        FROM questions AS qs
+                 JOIN student_answers_content AS sac ON qs.id=sac.question_id
+                 JOIN exam_question AS eq ON eq.exam_id=sac.exam_id AND eq.question_id=sac.question_id
+                 JOIN (
+            SELECT
+                question_id,
+                exam_id,
+                AVG(score) AS avg_score
+            FROM student_answers_content
+            WHERE exam_id=#{examId}
+            GROUP BY question_id, exam_id
+        ) AS class_avg ON class_avg.question_id=sac.question_id AND class_avg.exam_id=sac.exam_id
+        WHERE sac.exam_id=#{examId}
           AND sac.student_id=#{studentId}
           AND qs.type='fill'
-        ORDER BY
-            eq.number
+        ORDER BY eq.number;
     </select>
 
     <!--  简答  -->
@@ -344,34 +375,38 @@
     </resultMap>
 
     <select id="getAnswerQuestion" resultMap="AnswerMap">
-        select eq.number as id,
-               qs.topic as topic,
-               sac.comment as comment,
-               qs.correct_answer as correct_answer,
-               qs.parse as parse,
-               sac.img_answer as image,
-               sac.text_answer as answer,
-               qs.type as type,
-               sac.score as score,
-               eq.score as totalScore,
-               sac.img_answer as image,
-               ROUND(
-                       AVG(sac.score) OVER (PARTITION BY eq.exam_id, qs.id) / eq.score * 100,
-                       1
-               ) AS class_rate,
-               ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
-               CASE
-                   WHEN sac.score!=eq.score THEN false
-                   ELSE true
-               END AS hasCorrect
-        from questions as qs
-        JOIN student_answers_content as sac ON qs.id=sac.question_id
-        JOIN exam_question as eq ON eq.exam_id=sac.exam_id AND eq.question_id=sac.question_id
-        where sac.exam_id=#{examId}
+        SELECT
+            eq.number AS id,
+            qs.topic AS topic,
+            sac.comment AS comment,
+            qs.correct_answer AS correct_answer,
+            qs.parse AS parse,
+            sac.img_answer AS image,
+            sac.text_answer AS answer,
+            qs.type AS type,
+            sac.score AS score,
+            eq.score AS totalScore,
+            ROUND(avg_score / eq.score * 100, 1) AS class_rate,
+            ROUND((sac.score / eq.score) * 100, 1) AS yourRate,
+            CASE
+                WHEN sac.score!=eq.score THEN false
+                ELSE true
+                END AS hasCorrect
+        FROM questions AS qs
+                 JOIN student_answers_content AS sac ON qs.id=sac.question_id
+                 JOIN exam_question AS eq ON eq.exam_id=sac.exam_id AND eq.question_id=sac.question_id
+                 JOIN (
+            SELECT
+                question_id,
+                exam_id,
+                AVG(score) AS avg_score
+            FROM student_answers_content
+            GROUP BY question_id, exam_id
+        ) AS class_avg ON class_avg.question_id=sac.question_id AND class_avg.exam_id=sac.exam_id
+        WHERE sac.exam_id=#{examId}
           AND sac.student_id=#{studentId}
           AND qs.type='answer'
-        ORDER BY
-            eq.number
+        ORDER BY eq.number;
     </select>
 
 </mapper>
